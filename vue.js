@@ -96,6 +96,28 @@ var hookStyle = [
   'padding: 5px 60px 5px 5px',
 ].join(';')
 
+var sumTitleStyle = [
+  'font-size: 16px',
+  'color: #333',
+  // 'background-color: #D24D57',
+].join(';')
+
+var sumTextStyle = [
+  'font-size: 13px',
+  'color: #8B2F13',
+  'font-style: oblique'
+].join(';')
+
+var stageTitleStyle = [
+  'font-size: 16px',
+  'color: #fff',
+  'background-color: purple',
+  'border-radius: 50%',
+  'font-style: oblique',
+  'padding: 5px 10px'
+].join(';')
+
+
 var hookFunc = function (name) {
   console.log(`%c${lineNo} %c生命周期钩子${name}`, noStyle, hookStyle)
 }
@@ -109,6 +131,15 @@ var tagVariable = function (obj, tag, desc, num, detail, color) {
   console.log(`%c${lineNo} %o%c<---%c${tag}%c${desc}  %c源码${num}行 %c说明: %o`, noStyle, obj, arrowStyle ,tagLeftStyle, tagRightStyle(color), sourceNoStyle, detailStyle, detail)
   lineNo++
 }
+
+var stageDesc = function (title, content) {
+  console.log(`%c${title}阶段总结: %o`, stageTitleStyle, content)
+}
+
+var sumText = function (content) {
+  console.log(`%c上一阶段总结: %c${content}`, sumTitleStyle, sumTextStyle)
+}
+
 
 
 var styles = [
@@ -4918,6 +4949,7 @@ tagVariable('lifecycleMixin(Vue)', 'lifecycleMixin(Vue)','在Vue原型上添加_
 renderMixin(Vue);
 tagVariable('renderMixin(Vue)', 'renderMixin(Vue)','在Vue原型上添加$nextTick, _render, 等一些列属性', 4914, ['属性包括:_o,_n,_s,_l,_t,_q,_m......'], 'red')
 
+
 /*  */
 
 function initUse (Vue) {
@@ -5254,6 +5286,10 @@ function initGlobalAPI (Vue) {
 }
 
 initGlobalAPI(Vue);
+tagVariable('initGlobalAPI(Vue)', 'initGlobalAPI(Vue)','在Vue上添加静态属性:config, use, options,util, set, delete,extend 等', 4914, ['静态属性不同与原型上的属性,静态属性只能通过Vue访问,例:用插件时Vue.use(ElementUI),创建组件Vue.extend({..})', '原型上的属性一般通过实例访问,例:设置变量值this.$set(obj, key, value), 这里的this就是指向vm(Vue的实例)'], '#bbb')
+
+sumText('前面1~6步是对Vue.prototype原型的加工(添加很多属性和方法,以后可以通过实例访问),第7步Vue添加了静态属性和方法;以上7步未使用new Vue({..})之前就完成,其实就是<script src="./vue.js"></script>引入时就完成了')
+
 
 Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
