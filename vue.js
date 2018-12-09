@@ -12,6 +12,127 @@
 
 /*  */
 
+
+// console.log配置
+var lineNo = 1
+var generateSymbol = function (sy, count) {
+  count = count?count:10
+  let str = ''
+  while(count) {
+    str += sy
+    count--
+  }
+  return str
+}
+
+var segStyleTag = [
+  'background:#409EFF',
+  'color:#fff',
+  'font-size: 15px',
+  'border-radius:3px',
+  'padding:5px'
+].join(';')
+
+var segStyleLine = [
+  'color:#bbb',
+  'font-size: 15px',
+].join(';')
+var variStyle = function (color) {
+  color = color?color:'#333'
+  return [
+    `color: ${color}`,
+    'font-size: 20px'
+  ].join(';')
+}
+
+var tagLeftStyle = [
+  'color: #fff',
+  'border-top-left-radius:3px',
+  'border-bottom-left-radius:3px',
+  'background-color: #564b4f',
+  'padding: 5px'
+].join(';')
+
+var tagRightStyle = function (color) {
+  color = color?color:'#0BCF1B'
+  return [
+    'color: #fff',
+    'border-top-right-radius:3px',
+    'border-bottom-right-radius:3px',
+    `background-color: ${color}`,
+    'padding: 5px'
+  ].join(';')
+}
+
+var noStyle = [
+  'color: #326',
+  'font-size: 18px',
+  'font-style: oblique'
+].join(';')
+var arrowStyle = [
+  'font-size: 12px',
+  'color: #999x'
+].join(';')
+
+var sourceNoStyle = [
+  'color: #aaa',
+  'font-size: 13px',
+  'font-style: oblique'
+].join(';')
+
+
+var detailStyle = [
+  'color: #409EFF',
+  'font-size: 15px',
+  'font-weight: 600'
+].join(';')
+
+var hookStyle = [
+  'font-size: 14px',
+  'color: #fff',
+  'background-color: #D24D57',
+  'border-top-right-radius:50%',
+  'border-bottom-right-radius:50%',
+  'padding: 5px 60px 5px 5px',
+].join(';')
+
+var hookFunc = function (name) {
+  console.log(`%c${lineNo} %c生命周期钩子${name}`, noStyle, hookStyle)
+}
+
+var segmentLine = function (content, color, text) {
+  text = text?text:'start'
+  console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', text==='end'?17:15)}|`, noStyle, variStyle(), segStyleLine,segStyleTag, segStyleLine)
+  lineNo++
+}
+var tagVariable = function (obj, tag, desc, num, detail, color) {
+  console.log(`%c${lineNo} %o%c<---%c${tag}%c${desc}  %c源码${num}行 %c说明: %o`, noStyle, obj, arrowStyle ,tagLeftStyle, tagRightStyle(color), sourceNoStyle, detailStyle, detail)
+  lineNo++
+}
+
+
+var styles = [
+  'color: blue', 
+  'background: yellow', 
+  'font-size: 18px',
+  'border-radius: 2px',
+].join(';')
+var textstyle = [
+  'color: red', 
+  'background: #ddd', 
+  'font-size: 16px',
+  'border-radius: 3px',
+  'border: 1px solid #aaa'
+].join(';')
+var paramStyle = [
+  'color: blue', 
+  'font-size: 18px',
+  'border-radius: 3px',
+  'border: 1px solid #aaa'
+].join(';')
+
+//=====console.log=========
+
 var emptyObject = Object.freeze({});
 
 // these helpers produces better vm code in JS engines due to their
@@ -3630,7 +3751,6 @@ function stateMixin (Vue) {
   // flow somehow has problems with directly declared definition object
   // when using Object.defineProperty, so we have to procedurally build up
   // the object here.
-  console.log('%cstateMixin-**-begining-**', paramStyle)
   var dataDef = {};
   dataDef.get = function () { return this._data };
   var propsDef = {};
@@ -4778,7 +4898,6 @@ function dedupe (latest, extended, sealed) {
     return latest
   }
 }
-
 function Vue (options) {
   if ("development" !== 'production' &&
     !(this instanceof Vue)
@@ -4787,12 +4906,17 @@ function Vue (options) {
   }
   this._init(options);
 }
-
+tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '声明构造函数,但是还没执行', 4905, ['代码运行到这里时,只定义Vue函数,没执行(注:打印出来是省略的代码)'])
 initMixin(Vue);
+tagVariable('initMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加_init属性', 4911, ['initMixin(Vue), 以上一步定义的Vue构造函数为参,在它原型上添加_init,_init()用于初始化的过程后面再讲'], 'grey')
 stateMixin(Vue);
+tagVariable('stateMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 4912, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#409EFF')
 eventsMixin(Vue);
+tagVariable('eventMixin(Vue)', 'eventMixin(Vue)','在Vue原型上添加$on, $once, $offset, $emit属性', 4914, ['eventMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#67C23A')
 lifecycleMixin(Vue);
+tagVariable('lifecycleMixin(Vue)', 'lifecycleMixin(Vue)','在Vue原型上添加_update, $forceUpdate, $destory属性', 4914, ['lifecycleMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#F56C6C')
 renderMixin(Vue);
+tagVariable('renderMixin(Vue)', 'renderMixin(Vue)','在Vue原型上添加$nextTick, _render, 等一些列属性', 4914, ['属性包括:_o,_n,_s,_l,_t,_q,_m......'], 'red')
 
 /*  */
 
@@ -11062,100 +11186,3 @@ Vue.compile = compileToFunctions;
 return Vue;
 
 })));
-
-// console.log配置
-var lineNo = 1
-
-var countEq = 10
-
-var generateSymbol = function (sy, count) {
-  count = count?count:10
-  let str = ''
-  while(count) {
-    str += sy
-    count--
-  }
-  return str
-}
-
-var segStyleTag = [
-  'background:#409EFF',
-  'color:#fff',
-  'font-size: 15px',
-  'border-radius:3px',
-  'padding:5px'
-].join(';')
-
-var segStyleLine = [
-  'color:#bbb',
-  'font-size: 15px',
-].join(';')
-var variStyle = function (color) {
-  color = color?color:'#333'
-  return [
-    `color: ${color}`,
-    'font-size: 20px'
-  ].join(';')
-}
-
-var tagLeftStyle = [
-  'color: #fff',
-  'border-top-left-radius:3px',
-  'border-bottom-left-radius:3px',
-  'background-color: #564b4f',
-  'padding: 5px'
-].join(';')
-
-var tagRightStyle = function (color) {
-  color = color?color:'#0BCF1B'
-  return [
-    'color: #fff',
-    'border-top-right-radius:3px',
-    'border-bottom-right-radius:3px',
-    `background-color: ${color}`,
-    'padding: 5px'
-  ].join(';')
-}
-
-var noStyle = [
-  'color: #326',
-  'font-size: 18px',
-  'font-style: oblique'
-].join(';')
-var arrowStyle = [
-  'font-size: 12px',
-  'color: #999x'
-].join(';')
-
-var segmentLine = function (content, color, text) {
-  text = text?text:'start'
-  console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', 15)}|`, noStyle, variStyle(), segStyleLine,segStyleTag, segStyleLine)
-  lineNo++
-}
-var tagVariable = function (obj, tag, desc) {
-  console.log(`%c${lineNo} %o%c<---%c${tag}%c${desc}`, noStyle, obj, arrowStyle ,tagLeftStyle, tagRightStyle())
-  lineNo++
-}
-
-segmentLine('setment')
-tagVariable({}, 'fetch', '虚拟dom')
-
-var styles = [
-  'color: blue', 
-  'background: yellow', 
-  'font-size: 18px',
-  'border-radius: 2px',
-].join(';')
-var textstyle = [
-  'color: red', 
-  'background: #ddd', 
-  'font-size: 16px',
-  'border-radius: 3px',
-  'border: 1px solid #aaa'
-].join(';')
-var paramStyle = [
-  'color: blue', 
-  'font-size: 18px',
-  'border-radius: 3px',
-  'border: 1px solid #aaa'
-].join(';')
