@@ -25,18 +25,24 @@ var generateSymbol = function (sy, count) {
   return str
 }
 
-var segStyleTag = [
-  'background:#409EFF',
-  'color:#fff',
-  'font-size: 15px',
-  'border-radius:3px',
-  'padding:5px'
-].join(';')
+
+
+var segStyleTag = function (color) {
+  color = color?color:'#409EFF'
+  return [
+    `background:${color}`,
+    'color:#fff',
+    'font-size: 15px',
+    'border-radius:3px',
+    'padding:5px'
+  ].join(';')
+}
 
 var segStyleLine = [
   'color:#bbb',
   'font-size: 15px',
 ].join(';')
+
 var variStyle = function (color) {
   color = color?color:'#333'
   return [
@@ -112,7 +118,7 @@ var stageTitleStyle = [
   'font-size: 16px',
   'color: #fff',
   'background-color: purple',
-  'border-radius: 50%',
+  'border-radius: 30%',
   'font-style: oblique',
   'padding: 5px 10px'
 ].join(';')
@@ -122,9 +128,9 @@ var hookFunc = function (name) {
   console.log(`%c${lineNo} %c生命周期钩子${name}`, noStyle, hookStyle)
 }
 
-var segmentLine = function (content, color, text) {
+var segmentLine = function (content, color, text,num, detail) {
   text = text?text:'start'
-  console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', text==='end'?17:15)}|`, noStyle, variStyle(), segStyleLine,segStyleTag, segStyleLine)
+  console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', text==='end'?17:15)}|%c源码${num}行 %c说明: %o`, noStyle, variStyle(color), segStyleLine,segStyleTag(), segStyleLine, sourceNoStyle, detailStyle, detail)
   lineNo++
 }
 var tagVariable = function (obj, tag, desc, num, detail, color) {
@@ -132,8 +138,8 @@ var tagVariable = function (obj, tag, desc, num, detail, color) {
   lineNo++
 }
 
-var stageDesc = function (title, content) {
-  console.log(`%c${title}阶段总结: %o`, stageTitleStyle, content)
+var stageDesc = function (title, content, obj) {
+  console.log(`%c${title}阶段: %c${content} %o`, stageTitleStyle, 'color:blue',obj)
 }
 
 var sumText = function (content) {
@@ -4794,7 +4800,6 @@ var uid$3 = 0;
 
 function initMixin (Vue) {
   Vue.prototype._init = function (options) {
-    console.log('%c__init', textstyle)
     var vm = this;
     // a uid
     vm._uid = uid$3++;
@@ -4821,6 +4826,12 @@ function initMixin (Vue) {
         options || {},
         vm
       );
+      tagVariable('vm.$options = mergeOptions(reso..,options||{},vm)', 'mergeOptions()', '对开发者传入的选项进行处理,形成统一的格式', 4905, 
+      {'1开发者手写选项':options, '2经mergeOptions处理后选项':vm.$options,
+       '3处理后options说明': `data被处理成一个函数mergedInstanceDataFn,这个函数执行回调的值就是{name: '点我'},添加_base属性指向Vue构造函数`,
+       '4额外说明':'mergeOptions()还会处理props,钩子函数等,例子:在5,6点',
+       '5例props开发者有两种写法':[{'第一种props': ['name']}, {'第二种props': {name: {type: String, default:''}}},'最终都会被处理成第二种'],
+        '6例created钩子': [{'一般写法': `created: function(){..}`,'数组写法': {created: [`f1(){}`, `f2(){}`]}}, '最终都会被处理成第二种']},)
     }
     /* istanbul ignore else */
     {
@@ -4935,7 +4946,12 @@ function Vue (options) {
   ) {
     warn('Vue is a constructor and should be called with the `new` keyword');
   }
+  segmentLine('this._init(options)','', '', 11, 
+  {1:'看第1步定义了Vue的钩子函数,new Vue({..})会实例化时,会执行this._init(options)',
+   2:'执行this._init(options)就是第2步添加的_init方法, 因为this指向vm(Vue的实例)',
+   3:'参数options就是传递的{el:"#app",data()....},一个对象,开发者写的选项'})
   this._init(options);
+  segmentLine('this._init(options)','', 'end', 1)
 }
 tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '声明构造函数,但是还没执行', 4905, ['代码运行到这里时,只定义Vue函数,没执行(注:打印出来是省略的代码)'])
 initMixin(Vue);
@@ -5290,6 +5306,7 @@ tagVariable('initGlobalAPI(Vue)', 'initGlobalAPI(Vue)','在Vue上添加静态属
 
 sumText('前面1~6步是对Vue.prototype原型的加工(添加很多属性和方法,以后可以通过实例访问),第7步Vue添加了静态属性和方法;以上7步未使用new Vue({..})之前就完成,其实就是<script src="./vue.js"></script>引入时就完成了')
 
+stageDesc('初始化', '下面通过这个例子分析Vue',{1: `new Vue({el:'#app',data() {return {name: '点我'}},methods: {changeName () {this.name = 'jike'}}})`})
 
 Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
