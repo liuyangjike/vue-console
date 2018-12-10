@@ -124,8 +124,9 @@ var stageTitleStyle = [
 ].join(';')
 
 
-var hookFunc = function (name) {
-  console.log(`%c${lineNo} %c生命周期钩子${name}`, noStyle, hookStyle)
+var hookFunc = function (name, obj) {
+  console.log(`%c${lineNo} %c生命周期钩子${name} %c说明:%o`, noStyle, hookStyle, detailStyle,obj)
+  lineNo++
 }
 
 var segmentLine = function (content, color, text,num, detail) {
@@ -4829,22 +4830,35 @@ function initMixin (Vue) {
       tagVariable('vm.$options = mergeOptions(reso..,options||{},vm)', 'mergeOptions()', '对开发者传入的选项进行处理,形成统一的格式', 4905, 
       {'1开发者手写选项':options, '2经mergeOptions处理后选项':vm.$options,
        '3处理后options说明': `data被处理成一个函数mergedInstanceDataFn,这个函数执行回调的值就是{name: '点我'},添加_base属性指向Vue构造函数`,
-       '4额外说明':'mergeOptions()还会处理props,钩子函数等,例子:在5,6点',
+       '4额外说明':'mergeOptions()还会处理props,钩子函数等,最后赋值给vm.$options,例子:在5,6点',
        '5例props开发者有两种写法':[{'第一种props': ['name']}, {'第二种props': {name: {type: String, default:''}}},'最终都会被处理成第二种'],
         '6例created钩子': [{'一般写法': `created: function(){..}`,'数组写法': {created: [`f1(){}`, `f2(){}`]}}, '最终都会被处理成第二种']},)
     }
     /* istanbul ignore else */
     {
       initProxy(vm);
+      tagVariable('initProxy(vm)', 'initProxy(vm)', '在实例上添加_renderProxy,它的值vm实例', 4905, `vm._renderProxy = vm`, '#888')
     }
     // expose real self
     vm._self = vm;
     initLifecycle(vm);
+    console.log(vm)
+    tagVariable('initLifecycle(vm)', 'initLifecycle(vm)', '在实例上添加$children,$refs, $parent等', 4905, {'vm.$parent': '值为undefined,该组件没有父组件','vm.$children': '初始化为[]','vm.$refs': '初始化{}', 'vm._watcher': '初始化为null'}, '#336')
     initEvents(vm);
+    tagVariable('initEvents(vm)', 'initEvents(vm)', '在实例上添加_events,$refs, _hasHookEvent等', 4905, {'vm._event': '初始化为{}','vm._hasHookEvent': '初始化为false'}, '#855')
+
     initRender(vm);
-    console.log('%cbeforeCreate=========== in Vue.prototype._init',styles)    
+    tagVariable('initRender(vm)', 'initRender(vm)', '在实例上添加_vnode,_staticTrees, $slot,_c, $createElement等', 4905, {'vm._node': '初始化为null','vm._staticTress': '初始化为null', 'vm._c': '(a, b, c, d) => createElement(vm, a, b, c, d, false)', 'vm.$createElement': '(a, b, c, d) => createElement(vm, a, b, c, d, true)'}, 'orange')
+
     callHook(vm, 'beforeCreate');
+    hookFunc('beforeCreate', {'1实现': "callHook(vm, 'beforeCreate')其实就是取出开发者写options的beforeCreated执行", 
+                              '2callHook': '在callHook有句代码vm.$options[hook][i].call(vm), 在vm实例作用域下执行,这是就是为什么我们可以在钩子函数里用this调用data数据,methods方法的原因',
+                              '3vm.$emit("hook:" + hoook)': '可以用来监听组件的生命周期钩子'}) 
     initInjections(vm); // resolve injections before data/props
+    segmentLine('initState(vm)','', '', 11, 
+  {1:'initState(vm)会对props、methods、data、computed 和 watch 等初始化',
+   2:'我们的例子只会initData(vm), initMethods()',
+   3:'props初始化早于data,所以你可以在data里使用props接收到的值'})
     initState(vm);
     initProvide(vm); // resolve provide after data/props
     console.log('%ccreated=========== in Vue.prototype._init', styles)    
