@@ -129,7 +129,7 @@ var hookFunc = function (name, obj) {
   lineNo++
 }
 
-var segmentLine = function (content, color, text,num, detail) {
+var segmentLine = function (content, color, text, num, detail) {
   text = text?text:'start'
   console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', text==='end'?17:15)}|%c源码${num}行 %c说明: %o`, noStyle, variStyle(color), segStyleLine,segStyleTag(), segStyleLine, sourceNoStyle, detailStyle, detail)
   lineNo++
@@ -3528,8 +3528,12 @@ function initState (vm) {
   var opts = vm.$options;
   if (opts.props) { initProps(vm, opts.props); }
   if (opts.methods) { initMethods(vm, opts.methods); }
+  tagVariable('initMethods(vm, opts.methods)', 'initMethods(vm, opts.methods)', '在vm实例上定义methods里的同名方法,值为methods相对应的函数', 4905, [`循环methods选项,key是methods里的函数名'vm[key] = methods[key] == null ? noop : bind(methods[key]], vm);'`,'bind(methods[key]], vm)会将每个函数this指向vm实例',
+      {'vm.changeName就变成': 'function () {this.name = "jike"}'}], '#0F9')
   if (opts.data) {
+    segmentLine('initData(vm)','', '', 11, ['这里会将开始数据响应(双向数据绑定)'])
     initData(vm);
+    segmentLine('initData(vm)','', 'end', 11, ['到这一步时,vm.name的取值,和设置值我们就能拦截到了'])
   } else {
     observe(vm._data = {}, true /* asRootData */);
   }
@@ -3623,10 +3627,14 @@ function initData (vm) {
       );
     } else if (!isReserved(key)) {
       proxy(vm, "_data", key);
+      tagVariable('proxy(vm, "_data", key)', 'proxy(vm, "_data", key)', '将data的属性代理到vm实例上', 4905, ['该例子你可以访问vm.name,其实就是访问vm._data.name(_data就是你传入的data)'], '#FF3030')
     }
   }
   // observe data
+  segmentLine('observe(data, true)','', '', 11, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'])
   observe(data, true /* asRootData */);
+  console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/12/FtEk8I.png') no-repeat -0px -1px");
+  tagVariable('如上图观察data里的name', 'data', '变为访问属性(set, get)', 4905, {'vm._data': vm._data}, '#613030')  
 }
 
 function getData (data, vm) {
@@ -3730,6 +3738,7 @@ function createComputedGetter (key) {
 
 function initMethods (vm, methods) {
   var props = vm.$options.props;
+  console.log(methods)
   for (var key in methods) {
     {
       if (methods[key] == null) {
@@ -4853,7 +4862,8 @@ function initMixin (Vue) {
     callHook(vm, 'beforeCreate');
     hookFunc('beforeCreate', {'1实现': "callHook(vm, 'beforeCreate')其实就是取出开发者写options的beforeCreated执行", 
                               '2callHook': '在callHook有句代码vm.$options[hook][i].call(vm), 在vm实例作用域下执行,这是就是为什么我们可以在钩子函数里用this调用data数据,methods方法的原因',
-                              '3vm.$emit("hook:" + hoook)': '可以用来监听组件的生命周期钩子'}) 
+                              '3vm.$emit("hook:" + hoook)': '可以用来监听组件的生命周期钩子',
+                              '4tip': '在beforeCreated时,data,props,methods等未初始化,所以开发者都不能调用这些'}) 
     initInjections(vm); // resolve injections before data/props
     segmentLine('initState(vm)','', '', 11, 
   {1:'initState(vm)会对props、methods、data、computed 和 watch 等初始化',
