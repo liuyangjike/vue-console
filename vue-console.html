@@ -20,6 +20,12 @@
           name: '点我',
         }
       },
+      beforeCreate () {
+        console.log('%cI am beforeCreate------ 我在选项里写的', 'font-size: 20px;color: blue')
+      },
+      created () {
+        console.log('%cI am created------ 我在选项里写的', 'font-size: 20px;color: #368')
+      },
       methods: {
         changeName () {
           this.name = 'jike'

@@ -4859,11 +4859,12 @@ function initMixin (Vue) {
     initRender(vm);
     tagVariable('initRender(vm)', 'initRender(vm)', '在实例上添加_vnode,_staticTrees, $slot,_c, $createElement等', 4905, {'vm._node': '初始化为null','vm._staticTress': '初始化为null', 'vm._c': '(a, b, c, d) => createElement(vm, a, b, c, d, false)', 'vm.$createElement': '(a, b, c, d) => createElement(vm, a, b, c, d, true)'}, 'orange')
 
-    callHook(vm, 'beforeCreate');
     hookFunc('beforeCreate', {'1实现': "callHook(vm, 'beforeCreate')其实就是取出开发者写options的beforeCreated执行", 
                               '2callHook': '在callHook有句代码vm.$options[hook][i].call(vm), 在vm实例作用域下执行,这是就是为什么我们可以在钩子函数里用this调用data数据,methods方法的原因',
                               '3vm.$emit("hook:" + hoook)': '可以用来监听组件的生命周期钩子',
-                              '4tip': '在beforeCreated时,data,props,methods等未初始化,所以开发者都不能调用这些'}) 
+                              '4tip': '在beforeCreated时,data,props,methods等未初始化,所以开发者都不能调用这些',
+                              '5t': '下面打印的就是我写的beforeCreate钩子'}) 
+    callHook(vm, 'beforeCreate');    
     initInjections(vm); // resolve injections before data/props
     segmentLine('initState(vm)','', '', 11, 
   {1:'initState(vm)会对props、methods、data、computed 和 watch 等初始化',
@@ -4871,8 +4872,14 @@ function initMixin (Vue) {
    3:'props初始化早于data,所以你可以在data里使用props接收到的值'})
     initState(vm);
     initProvide(vm); // resolve provide after data/props
-    console.log('%ccreated=========== in Vue.prototype._init', styles)    
+        
+    hookFunc('created', {'1实现': "callHook(vm, 'created')其实就是取出开发者写options的created执行", 
+                              '2callHook': '同beforeCreate',
+                              '3tip': '在created时,data,props,methods等已经经过initData等初始化,所以开发者可以调用data,(如例子:可以调用this.name,this.changeName)',
+                             '4': '可以在created做的事:调用api获取数据,预处理一些数据等待挂载,此时还不能操作dom,因为还没生成',
+                              '5': '下面打印的就是我写的created钩子'}) 
     callHook(vm, 'created');
+
 
     /* istanbul ignore if */
     if ("development" !== 'production' && config.performance && mark) {
@@ -4882,7 +4889,8 @@ function initMixin (Vue) {
     }
 
     if (vm.$options.el) {
-      console.log('%cvm.$mount()-**------begining--------** in Vue.prototype._init', textstyle)
+      stageDesc('挂载阶段', '将我们写的组件挂载到给定元素上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
+      segmentLine('vm.$mount(vm.$options.el)','', '', 11)
       vm.$mount(vm.$options.el);
       console.log('%cvm.$mount()-**-------ending---------** in Vue.prototype._init', textstyle)
     }
@@ -11131,6 +11139,7 @@ var createCompiler = createCompilerCreator(function baseCompile (
   console.log('%cast(parse)**---begining---**', "color: #576;font-size: 17px")
   console.log(template +'%c<---template', paramStyle)
   var ast = parse(template.trim(), options);
+  tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值), 下一条就是el的值,`], '#FF359A')
   console.log(ast , 'c%<-----ast')
   console.log('%cast(parse)**---ending---**', "color: #576;font-size: 17px")
   if (options.optimize !== false) {
@@ -11181,6 +11190,7 @@ Vue.prototype.$mount = function (
   hydrating
 ) {
   el = el && query(el);
+  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值), 下一条就是el的值,`, el], '#FF359A')
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
