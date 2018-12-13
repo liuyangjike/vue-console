@@ -11136,20 +11136,20 @@ var createCompiler = createCompilerCreator(function baseCompile (
   template,
   options
 ) {
-  console.log('%cast(parse)**---begining---**', "color: #576;font-size: 17px")
-  console.log(template +'%c<---template', paramStyle)
+  tagVariable(template, 'template', '这里的template就是上一步id=app的dom的outerHTML的值', 4905, [`template的是一个字符串`], '#800080')
   var ast = parse(template.trim(), options);
-  tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值), 下一条就是el的值,`], '#FF359A')
-  console.log(ast , 'c%<-----ast')
+  tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '将模版字符串(template)转化成ast(抽象语法树)', 4905, {1:"将字符串通过正则生成树形结构的数据(每一层数据对应相对应的dom)","ast": ast, "说明": 'dom是三层对象,所以ast也是三层的'  }, '#7fff7f')
   console.log('%cast(parse)**---ending---**', "color: #576;font-size: 17px")
   if (options.optimize !== false) {
     optimize(ast, options);
   }
   console.log('%cgenerate(render函数生成)**---begining---**', "color: #009;font-size: 18px")
   var code = generate(ast, options);
+  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code值':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面我通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 前面这段代码会打印1', "4staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
   console.log(code.render + "%c<-------render()",textstyle)
   console.log('%c' + code.staticRenderFns + '<---staticRenderFns', paramStyle)
   console.log('%cgenerate(render函数生成)**---ending---**', "color: #009;font-size: 18px")
+  console.log(code)
   return {
     ast: ast,
     render: code.render,
@@ -11190,7 +11190,7 @@ Vue.prototype.$mount = function (
   hydrating
 ) {
   el = el && query(el);
-  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值), 下一条就是el的值,`, el], '#FF359A')
+  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值), 下一条就是el的值,`, el, 'query(el): document.querySelector(el)'], '#FF359A')
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
