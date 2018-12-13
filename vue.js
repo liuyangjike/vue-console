@@ -246,13 +246,7 @@ function isValidArrayIndex (val) {
  * Convert a value to a string that is actually rendered.
  */
 function toString (val) {
-  console.log('%c_s(name)--**----begining---**--', textstyle)
-  console.log(val == null
-    ? ''
-    : typeof val === 'object'
-      ? JSON.stringify(val, null, 2)
-      : String(val), '<--------s(name)')
-  console.log('%c_s(name)--**----ending---**--', textstyle)
+  tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”', 11,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”'}, )
   return val == null
     ? ''
     : typeof val === 'object'
@@ -943,9 +937,7 @@ var createEmptyVNode = function (text) {
 };
 
 function createTextVNode (val) {
-  console.log("%c_c('jike')--**-----begining----***--", textstyle)
-  console.log(new VNode(undefined, undefined, undefined, String(val)), '<------_v(s(name))')
-  console.log("%c_c('jike')--**-----ending----***--", textstyle)
+  tagVariable('接着执行_v("点我")', '_v("点我")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 11,{'_v("点我)值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
   return new VNode(undefined, undefined, undefined, String(val))
 }
 
@@ -4588,7 +4580,6 @@ function _createElement (
   children,
   normalizationType
 ) {
-  console.log('%c_createElemnt--**----begining-----', paramStyle)
   if (isDef(data) && isDef((data).__ob__)) {
     "development" !== 'production' && warn(
       "Avoid using observed data object as vnode data: " + (JSON.stringify(data)) + "\n" +
@@ -4656,8 +4647,11 @@ function _createElement (
     // direct component options / constructor
     vnode = createComponent(tag, data, context, children);
   }
-  console.log(vnode, '%c<-----vnode')
-  console.log('%c_createElemnt--**----ending-----', paramStyle)
+  if (data.on) {
+    tagVariable("再接着执行_c('div',{attrs:{'id':'hi'},on:{'click':changeName}}, ['上一步的生成的_v()生成的文本节点'])", '_c()', '_c()就是函数createElement,用来创建虚拟DOM的一般节点', 11,{'_c()值': vnode , 'tip': '这里_c()收到三个参数', 'vnode结构':'两层结构'}, '#006ba2')
+  } else {
+    tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 11,{'_c()值': vnode , 'vnode结构':'三层结构(html的dom相对)', 'sum': '该值就是最终要的虚拟dom(vnode)'}, '#b04800')
+  }
   if (Array.isArray(vnode)) {
     return vnode
   } else if (isDef(vnode)) {
@@ -4742,7 +4736,6 @@ function renderMixin (Vue) {
   };
 
   Vue.prototype._render = function () {
-    console.log('%cvm_render()-**---begining---**', "color: red;background:#ddd")
     var vm = this;
     var ref = vm.$options;
     var render = ref.render;
@@ -4766,7 +4759,10 @@ function renderMixin (Vue) {
     // render self
     var vnode;
     try {
+      segmentLine('vm._render()','', '', 11, ['通过new Function(){code}执行渲染函数的字符串代码'])
+      tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
       vnode = render.call(vm._renderProxy, vm.$createElement);
+      segmentLine('vm._render()','', 'end', 11, {'vnode值': vnode})
     } catch (e) {
       handleError(e, vm, "render");
       // return error render result,
@@ -4798,7 +4794,6 @@ function renderMixin (Vue) {
     }
     // set parent
     vnode.parent = _parentVnode;
-    console.log('%cvm_render()-**---ending---**', "color: red;background:#ddd")
     return vnode
   };
 }
@@ -11144,6 +11139,7 @@ var createCompiler = createCompilerCreator(function baseCompile (
   var code = generate(ast, options);
   tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code值':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面我通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 前面这段代码会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
   console.log(code)
+  jiketemplate = code.render
   return {
     ast: ast,
     render: code.render,
@@ -11151,6 +11147,7 @@ var createCompiler = createCompilerCreator(function baseCompile (
   }
 });
 
+var jiketemplate = ''
 /*  */
 
 var ref$1 = createCompiler(baseOptions);
