@@ -26,6 +26,9 @@
       created () {
         console.log('%cI am created------ 我在选项里写的', 'font-size: 20px;color: #368')
       },
+      beforeMount () {
+        console.log('%cI am beforeMount------ 我在选项里写的', 'font-size: 20px;color: #659')
+      },
       methods: {
         changeName () {
           this.name = 'jike'

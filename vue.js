@@ -2930,7 +2930,7 @@ function mountComponent (
       }
     }
   }
-  console.log('%cbeforeMount钩子===========  in mountComponent', styles)
+  hookFunc('beforeMount', {'1实现': "callHook(vm, 'beforeMount')其实就是取出开发者写options的beforeMount执行", '其它': '同上面钩子函数'}) 
   callHook(vm, 'beforeMount');
 
   var updateComponent;
@@ -2961,7 +2961,7 @@ function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
-  console.log('%cnew Watcher----**----begining-**', textstyle)
+  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', '', 11, {'1这里的updateComponent为':'updateCompnent = function () {vm._update(vm._render(), hydrating)}', '3vm._update()作用': '将虚拟DOM渲染成真正的DOM',"2vm._render()": '其实就是在vm作用下执行27步生成的渲染函数字符串,最终生成虚拟DOM'})
   new Watcher(vm, updateComponent, noop, {
     before: function before () {
       if (vm._isMounted) {
@@ -2969,7 +2969,7 @@ function mountComponent (
       }
     }
   }, true /* isRenderWatcher */);
-  console.log('%cnew Watcher-**-----ending-----**', textstyle)
+  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', 'end', 11, ['这里会将开始数据响应(双向数据绑定)'])
 
   hydrating = false;
 
@@ -3323,14 +3323,13 @@ var Watcher = function Watcher (
  * Evaluate the getter, and re-collect dependencies.
  */
 Watcher.prototype.get = function get () {
-  console.log('%cWathcer.get()-**--begining-**-', paramStyle)
   pushTarget(this);
   var value;
   var vm = this.vm;
   try {
-    console.log('%cupdateComponent()**--begining-**-', "color: #fff;background:#666")
+    segmentLine('updateComponent()','', '', 11, ['这里面对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据29步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'])
     value = this.getter.call(vm, vm);
-    console.log('%cupdateComponent()**--ending-**-', "color: #fff;background:#666")
+    segmentLine('updateComponent()','', 'end', 11)
   } catch (e) {
     if (this.user) {
       handleError(e, vm, ("getter for watcher \"" + (this.expression) + "\""));
@@ -8838,9 +8837,7 @@ Vue.prototype.$mount = function (
   el,
   hydrating
 ) {
-  console.log('%o%c<=======el(teamplate,未编译的dom节点含{{name}})', query(el), paramStyle)
   el = el && inBrowser ? query(el) : undefined;
-  console.log('%cmountComponent-**-begining-** in $mount', textstyle)
   return mountComponent(this, el, hydrating)
 };
 
@@ -11145,10 +11142,7 @@ var createCompiler = createCompilerCreator(function baseCompile (
   }
   console.log('%cgenerate(render函数生成)**---begining---**', "color: #009;font-size: 18px")
   var code = generate(ast, options);
-  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code值':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面我通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 前面这段代码会打印1', "4staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
-  console.log(code.render + "%c<-------render()",textstyle)
-  console.log('%c' + code.staticRenderFns + '<---staticRenderFns', paramStyle)
-  console.log('%cgenerate(render函数生成)**---ending---**', "color: #009;font-size: 18px")
+  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code值':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面我通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 前面这段代码会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
   console.log(code)
   return {
     ast: ast,
