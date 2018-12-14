@@ -3323,9 +3323,17 @@ Watcher.prototype.get = function get () {
   var value;
   var vm = this.vm;
   try {
-    segmentLine('updateComponent()','', '', 11, ['这里面对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据29步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'])
+    if (!consoleInUpdate) {
+      segmentLine('updateComponent()','', '', 11, ['这里面对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据29步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'])
+    } else {
+      segmentLine('updateComponent()','', '', 11, ['updateComponent()执行(基本初始化差不多,只不过回vm._update()的patch函数会不同,它会对比新旧vnode的变化,再更新),会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'])
+    }
     value = this.getter.call(vm, vm);
-    segmentLine('updateComponent()','', 'end', 11)
+    if (!consoleInUpdate) {
+      segmentLine('updateComponent()','', 'end', 11)
+    } else {
+      segmentLine('updateComponent()','', 'end', 11)
+    }
   } catch (e) {
     if (this.user) {
       handleError(e, vm, ("getter for watcher \"" + (this.expression) + "\""));
@@ -3422,13 +3430,10 @@ Watcher.prototype.update = function update () {
  * Will be called by the scheduler.
  */
 Watcher.prototype.run = function run () {
-  console.log('%cwatcher.run()---**-----begining-----**---', paramStyle)
+  consoleInUpdate = true
   if (this.active) {
-    console.log('%cwatcher.getAndInvoke()---**-----begining-----**---', textstyle)
     this.getAndInvoke(this.cb);
-    console.log('%cwatcher.getAndInvoke()---**-----ending-----**---', textstyle)
   }
-  console.log('%cwatcher.run()---**-----ending-----**---', paramStyle)
 };
 
 Watcher.prototype.getAndInvoke = function getAndInvoke (cb) {
