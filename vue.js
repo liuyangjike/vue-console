@@ -5849,7 +5849,13 @@ function createPatchFunction (backend) {
         ? nodeOps.createElementNS(vnode.ns, tag)
         : nodeOps.createElement(tag, vnode);
       setScope(vnode);
-
+      if (!consoleInUpdate) {
+        if (data.attrs.id === 'app') {
+          tagVariable(nodeOps.createElement(tag, vnode), 'vnode(id=app)添加elm属性 ', '值为<div></div>', 4905, [`vnode层级: {id=app,children:[{id:hi,children:[{text:‘点我’}]}]}`], '#7fffa6')
+        } else {
+          tagVariable(nodeOps.createElement(tag, vnode), 'vnode(id=hi)添加elm属性 ', '值为<div></div>', 4905, [`vnode层级:{id:hi,children:[{text:‘点我’}]}`], '#803005')
+        }
+      }
       /* istanbul ignore if */
       {
         createChildren(vnode, children, insertedVnodeQueue);
@@ -5857,6 +5863,11 @@ function createPatchFunction (backend) {
           invokeCreateHooks(vnode, insertedVnodeQueue);
         }
         insert(parentElm, vnode.elm, refElm);
+        if (data.attrs.id !== 'app') {
+          tagVariable('insert(parentElm, vnode.elm, refElm);', 'insert()方法给某dom(parentElm)添加子dom(vnode.elm)', '将id=hi的dom通过appendChild添加到id=‘app’的dom上', 4905, {parentElm: parentElm, 'vnode.elm': vnode.elm}, '#8a9cff')        
+        } else {
+          tagVariable('insert(parentElm, vnode.elm, refElm);', 'insert()方法给某dom(parentElm)添加子dom(vnode.elm)', '将id=app的dom通过appendChild添加到body上', 4905, {parentElm: parentElm, 'vnode.elm': vnode.elm}, '#dc3800')        
+        }
       }
 
       if ("development" !== 'production' && data && data.pre) {
@@ -5867,6 +5878,7 @@ function createPatchFunction (backend) {
       insert(parentElm, vnode.elm, refElm);
     } else {
       vnode.elm = nodeOps.createTextNode(vnode.text);
+      tagVariable(nodeOps.createTextNode(vnode.text), 'vnode(text="点我")添加elm属性 ', '值为真实dom的文本节点', 4905, [`将该文本节点,先通过update*方法更新dom属性(这里没什么更新的), 把它append到42步的vnode(id=hi)的elm属性值的dom上`], '#007678')
       insert(parentElm, vnode.elm, refElm);
     }
   }
@@ -6366,7 +6378,7 @@ function createPatchFunction (backend) {
   }
 
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
-    
+    if (!consoleInUpdate) {tagVariable(vnode, 'vnode(id=app)', '三层结构', 4905, [], '#800080')}
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) { invokeDestroyHook(oldVnode); }
       return
