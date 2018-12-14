@@ -248,8 +248,12 @@ function isValidArrayIndex (val) {
  * Convert a value to a string that is actually rendered.
  */
 function toString (val) {
-  tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”,这里对name取值会触发name的get函数', 11,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”', '对name取值会会触发name的get函数': '会将name的watcher放到name的dep例,如下图讲解'}, )
-  console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhIRx.png') no-repeat");
+  if (!consoleInUpdate) {
+    tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”,这里对name取值会触发name的get函数', 11,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”', '对name取值会会触发name的get函数': '会将name的watcher放到name的dep例,如下图讲解'}, )
+    console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhIRx.png') no-repeat");
+  } else {
+    tagVariable('首先_s(name)', '_s(name)', 'name变成‘jike’,_s(name)就是“jike”', 11, {'点击事件changeName': "直接将name有“点我”变成“jike'”"},  )
+  }
   return val == null
     ? ''
     : typeof val === 'object'
@@ -940,7 +944,11 @@ var createEmptyVNode = function (text) {
 };
 
 function createTextVNode (val) {
-  tagVariable('接着执行_v("点我")', '_v("点我")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 11,{'_v("点我)值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
+  if (!consoleInUpdate) {
+    tagVariable('接着执行_v("点我")', '_v("点我")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 11,{'_v("点我)值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
+  } else {
+    tagVariable('接着执行_v("jike")', '_v("jike")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 11,{'_v("jike")值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
+  }
   return new VNode(undefined, undefined, undefined, String(val))
 }
 
@@ -2816,22 +2824,24 @@ function lifecycleMixin (Vue) {
     var prevVnode = vm._vnode;
     var prevActiveInstance = activeInstance;
     activeInstance = vm;
-    console.log(prevVnode, '<------prevVnode')
-    console.log(vnode, '<------vnode')
     vm._vnode = vnode;
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) {
       // initial render
+ 
       segmentLine('初始化的vm.__patch__()','', '', 11, {'vm._patch__()':'虚拟dom映射成真实的dom', '下图就是整个patch实现过程图': '',})
       console.log("%c\n       ", "font-size:400px;background:url('https://s1.ax1x.com/2018/12/14/FUpeQU.png') no-repeat");      
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */);
       segmentLine('初始化的vm.__patch__()','', 'end', 11, {})
     } else {
       // updates
-      console.log('%c更新vm.__patch__()--**---begining----=======', paramStyle)
+      tagVariable(prevVnode, 'prevVnode', '旧的虚拟dom(“点我”那个时候的)', 1, {},'#e680ff')
+      tagVariable(vnode, 'vnode', '新的虚拟dom(‘jike’这个时候)', 1, {"注意": "由于console异步的,打印出来不对,此时新vnode.elm为undefined,建议用debugger看"},'#801e00')
+      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 11, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更小方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"})
+    console.log("%c\n       ", "font-size:280px;background:url('https://s1.ax1x.com/2018/12/14/FU0dz9.png') no-repeat");
       vm.$el = vm.__patch__(prevVnode, vnode);
-      console.log('%c更新vm.__patch__()--**---begining----=======', paramStyle)
+      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 11, {})
     }
     activeInstance = prevActiveInstance;
     // update __vue__ reference
@@ -2973,8 +2983,9 @@ function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true;
-    console.log('%cmounted=========== in mountComponent', styles)
+    hookFunc('mounted', {'1实现': "callHook(vm, 'mounted')其实就是取出开发者写options的mounted执行", '其它': '同上面钩子函数'}) 
     callHook(vm, 'mounted');
+
   }
   return vm
 }
@@ -4570,7 +4581,6 @@ function createElement (
   normalizationType,
   alwaysNormalize
 ) {
-  console.log('%ccreateElement() 其实就是_createElement--**-------begining-------**--', textstyle)
   if (Array.isArray(data) || isPrimitive(data)) {
     normalizationType = children;
     children = data;
@@ -4659,7 +4669,11 @@ function _createElement (
   if (data.on) {
     tagVariable("再接着执行_c('div',{attrs:{'id':'hi'},on:{'click':changeName}}, ['上一步的生成的_v()生成的文本节点'])", '_c()', '_c()就是函数createElement,用来创建虚拟DOM的一般节点', 11,{'_c()值': vnode , 'tip': '这里_c()收到三个参数', 'vnode结构':'两层结构'}, '#006ba2')
   } else {
-    tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 11,{'_c()值': vnode , 'vnode结构':'三层结构(html的dom相对)', 'sum': '该值就是最终要的虚拟dom(vnode)'}, '#b04800')
+    if (!consoleInUpdate) {
+      tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 11,{'_c()值': vnode , 'vnode结构':'三层结构(html的dom相对)', 'sum': '该值就是最终要的虚拟dom(vnode)'}, '#b04800')
+    } else {
+      tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 11,{'新的vnode值': vnode }, '#b04800')
+    }
   }
   if (Array.isArray(vnode)) {
     return vnode
@@ -4768,10 +4782,19 @@ function renderMixin (Vue) {
     // render self
     var vnode;
     try {
-      segmentLine('vm._render()','', '', 11, ['通过new Function(){code}执行渲染函数的字符串代码'])
-      tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
+      if (!consoleInUpdate) {
+        segmentLine('vm._render()','', '', 11, ['通过new Function(){code}执行渲染函数的字符串代码'])
+        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')        
+      } else {
+        segmentLine('vm._render()','', '', 11, ['同上,不过name的值已经变为“jike”,将会生成新的vnode'])
+        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
+      }
       vnode = render.call(vm._renderProxy, vm.$createElement);
-      segmentLine('vm._render()','', 'end', 11, {'vnode值': vnode})
+      if (!consoleInUpdate) { 
+        segmentLine('vm._render()','', 'end', 11, {'vnode值': vnode})
+      } else {
+        segmentLine('vm._render()','', 'end', 11, {'新的vnode值': vnode})
+      }
     } catch (e) {
       handleError(e, vm, "render");
       // return error render result,
@@ -4895,7 +4918,6 @@ function initMixin (Vue) {
       stageDesc('挂载阶段', '将我们写的组件挂载到给定元素上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
       segmentLine('vm.$mount(vm.$options.el)','', '', 11)
       vm.$mount(vm.$options.el);
-      console.log('%cvm.$mount()-**-------ending---------** in Vue.prototype._init', textstyle)
     }
   };
 }
@@ -4987,6 +5009,7 @@ function Vue (options) {
    3:'参数options就是传递的{el:"#app",data()....},一个对象,开发者写的选项'})
   this._init(options);
   segmentLine('this._init(options)','', 'end', 1)
+  console.log("%c\n       ", "font-size:390px;background:url('https://s1.ax1x.com/2018/12/14/FU0Wzd.png') no-repeat");
 }
 tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '声明构造函数,但是还没执行', 4905, ['代码运行到这里时,只定义Vue函数,没执行(注:打印出来是省略的代码)'])
 initMixin(Vue);
