@@ -26,6 +26,8 @@ var generateSymbol = function (sy, count) {
 }
 
 
+var consoleInUpdate = false
+
 
 var segStyleTag = function (color) {
   color = color?color:'#409EFF'
@@ -246,7 +248,8 @@ function isValidArrayIndex (val) {
  * Convert a value to a string that is actually rendered.
  */
 function toString (val) {
-  tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”', 11,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”'}, )
+  tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”,这里对name取值会触发name的get函数', 11,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”', '对name取值会会触发name的get函数': '会将name的watcher放到name的dep例,如下图讲解'}, )
+  console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhIRx.png') no-repeat");
   return val == null
     ? ''
     : typeof val === 'object'
@@ -2807,7 +2810,7 @@ function initLifecycle (vm) {
 
 function lifecycleMixin (Vue) {
   Vue.prototype._update = function (vnode, hydrating) {
-    console.log('%cvm_update()--**------begining------**---', textstyle)
+    segmentLine('vm._update(vm._render())','', '', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',})
     var vm = this;
     var prevEl = vm.$el;
     var prevVnode = vm._vnode;
@@ -2820,9 +2823,10 @@ function lifecycleMixin (Vue) {
     // based on the rendering backend used.
     if (!prevVnode) {
       // initial render
-      console.log('%c初始化的vm.__patch__()--**---begining----=======', textstyle)
+      segmentLine('初始化的vm.__patch__()','', '', 11, {'vm._patch__()':'虚拟dom映射成真实的dom', '下图就是整个patch实现过程图': '',})
+      console.log("%c\n       ", "font-size:400px;background:url('https://s1.ax1x.com/2018/12/14/FUpeQU.png') no-repeat");      
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */);
-      console.log('%c初始化的vm.__patch__()--**---ending----=======', textstyle)
+      segmentLine('初始化的vm.__patch__()','', 'end', 11, {})
     } else {
       // updates
       console.log('%c更新vm.__patch__()--**---begining----=======', paramStyle)
@@ -3624,7 +3628,7 @@ function initData (vm) {
   // observe data
   segmentLine('observe(data, true)','', '', 11, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'])
   observe(data, true /* asRootData */);
-  console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/12/FtEk8I.png') no-repeat -0px -1px");
+  console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhoz6.png') no-repeat");
   tagVariable('如上图观察data里的name', 'data', '变为访问属性(set, get)', 4905, {'vm._data': vm._data}, '#613030')  
 }
 
@@ -6362,8 +6366,7 @@ function createPatchFunction (backend) {
   }
 
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
-    console.log(oldVnode, '<------oldVnode',)
-    console.log(vnode, '<------vnode')
+    
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) { invokeDestroyHook(oldVnode); }
       return
@@ -11131,11 +11134,9 @@ var createCompiler = createCompilerCreator(function baseCompile (
   tagVariable(template, 'template', '这里的template就是上一步id=app的dom的outerHTML的值', 4905, [`template的是一个字符串`], '#800080')
   var ast = parse(template.trim(), options);
   tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '将模版字符串(template)转化成ast(抽象语法树)', 4905, {1:"将字符串通过正则生成树形结构的数据(每一层数据对应相对应的dom)","ast": ast, "说明": 'dom是三层对象,所以ast也是三层的'  }, '#7fff7f')
-  console.log('%cast(parse)**---ending---**', "color: #576;font-size: 17px")
   if (options.optimize !== false) {
     optimize(ast, options);
   }
-  console.log('%cgenerate(render函数生成)**---begining---**', "color: #009;font-size: 18px")
   var code = generate(ast, options);
   tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code值':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面我通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 前面这段代码会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
   console.log(code)
