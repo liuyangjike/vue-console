@@ -131,7 +131,7 @@ var startTitle = [
   'background-color: #ddd',
   'border-radius: 5px',
   'padding: 5px 10px',
-  'margin-left: 38%'
+  'margin-left: 33%'
 ].join(';')
 
 var startContent = [
@@ -166,8 +166,9 @@ var sumText = function (content) {
   console.log(`%c上一阶段总结: %c${content}`, sumTitleStyle, sumTextStyle)
 }
 
+
 var startText = function () {
-  console.log('%c项目介绍', startTitle)
+  console.log('%c项目介绍%c %chttps://github.com/liuyangjike/vue-console 欢迎star,感谢', startTitle, "font-size:30px;padding:0 10px;background:url('https://s1.ax1x.com/2018/12/15/FUqtun.png') -0px no-repeat", '')
   console.log('%c1. 该项目会以一个简单的例子讲解整个Vue变化,追踪各个过程的变化, \n2.你需要对js的原型、作用域、闭包有所了解\n3.本文不会做非常详细的讲解,如果想看具体的可以看最后参考的文章\n4.console打印出来的某些值不一定准确(建议配合debugger模式看)', startContent)
 }
 
