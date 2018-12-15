@@ -264,10 +264,10 @@ function isValidArrayIndex (val) {
  */
 function toString (val) {
   if (!consoleInUpdate) {
-    tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”,这里对name取值会触发name的get函数', 11,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”', '对name取值会会触发name的get函数': '会将name的watcher放到name的dep例,如下图讲解'}, )
+    tagVariable('首先_s(name)', '_s(name)', '_s()其实就是toString,作用将参数字符串化, 结果就是“点我”,这里对name取值会触发name的get函数', 267,{'_s(name)': 'name在vm实例下的值是“点我”,_s("点我")还是“点我”', '对name取值会会触发name的get函数': '会将name的watcher放到name的dep例,如下图讲解'}, )
     console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhIRx.png') no-repeat");
   } else {
-    tagVariable('首先_s(name)', '_s(name)', 'name变成‘jike’,_s(name)就是“jike”', 11, {'点击事件changeName': "直接将name有“点我”变成“jike'”"},  )
+    tagVariable('首先_s(name)', '_s(name)', 'name变成‘jike’,_s(name)就是“jike”', 270, {'点击事件changeName': "直接将name有“点我”变成“jike'”"},  )
   }
   return val == null
     ? ''
@@ -960,9 +960,9 @@ var createEmptyVNode = function (text) {
 
 function createTextVNode (val) {
   if (!consoleInUpdate) {
-    tagVariable('接着执行_v("点我")', '_v("点我")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 11,{'_v("点我)值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
+    tagVariable('接着执行_v("点我")', '_v("点我")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 963,{'_v("点我)值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
   } else {
-    tagVariable('接着执行_v("jike")', '_v("jike")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 11,{'_v("jike")值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
+    tagVariable('接着执行_v("jike")', '_v("jike")', '_v()就是函数createTextVNode,用来创建虚拟DOM的文本节点', 965,{'_v("jike")值': new VNode(undefined, undefined, undefined, String(val))}, '#5b5a4e')
   }
   return new VNode(undefined, undefined, undefined, String(val))
 }
@@ -1191,7 +1191,7 @@ function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
-      stageDesc('更新阶段', '点击文本发生的更新过程',['该阶段通过name的set函数拦截name的值变化,触发观察者完成更新视图的过程(如上图的考生要修改答案开始道结束)'])
+      stageDesc('更新阶段', '点击文本发生的更新过程',['该阶段通过name的set函数拦截name的值变化,触发观察者完成更新视图的过程(如上图的考生要修改答案开始到再次交卷的过程)'])
       var value = getter ? getter.call(obj) : val;
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
@@ -2834,7 +2834,7 @@ function initLifecycle (vm) {
 
 function lifecycleMixin (Vue) {
   Vue.prototype._update = function (vnode, hydrating) {
-    segmentLine('vm._update(vm._render())','', '', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',}, !consoleInUpdate?[39, 48]:[63, 71])
+    segmentLine('vm._update(vm._render())','', '', 2837, {'vm._update':'对比上一步生成的新vnode和原来vnode对比,再更新',}, !consoleInUpdate?[39, 48]:[63, 71])
     var vm = this;
     var prevEl = vm.$el;
     var prevVnode = vm._vnode;
@@ -2846,20 +2846,20 @@ function lifecycleMixin (Vue) {
     if (!prevVnode) {
       // initial render
  
-      segmentLine('初始化的vm.__patch__()','', '', 11, {'vm._patch__()':'虚拟dom映射成真实的dom', '下图就是整个patch实现过程图': '',}, [40, 47])
+      segmentLine('初始化的vm.__patch__()','', '', 2849, {'vm._patch__()':'虚拟dom映射成真实的dom', '下图就是整个patch实现过程图': '',}, [40, 47])
       console.log("%c\n       ", "font-size:400px;background:url('https://s1.ax1x.com/2018/12/14/FUpeQU.png') no-repeat");      
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */);
-      segmentLine('初始化的vm.__patch__()','', 'end', 11, {}, [40, 47])
-      segmentLine('vm._update(vm._render())','', 'end', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',}, [39, 48])
+      segmentLine('初始化的vm.__patch__()','', 'end', 2852, ['这个时候你在页面上已经可以看到“点我”'], [40, 47])
+      segmentLine('vm._update(vm._render())','', 'end', 2853, {}, [39, 48])
     } else {
       // updates
-      tagVariable(prevVnode, 'prevVnode', '旧的虚拟dom(“点我”那个时候的)', 1, {},'#e680ff')
-      tagVariable(vnode, 'vnode', '新的虚拟dom(‘jike’这个时候)', 1, {"注意": "由于console异步的,打印出来不对,此时新vnode.elm为undefined,建议用debugger看"},'#801e00')
-      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 11, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更小方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"}, [66, 70])
+      tagVariable(prevVnode, 'prevVnode', '旧的虚拟dom(“点我”那个时候的)', 2856, {},'#e680ff')
+      tagVariable(vnode, 'vnode', '新的虚拟dom(‘jike’这个时候)', 2857, {"注意": "由于console打印出来不准确,此时新vnode.elm为undefined,建议用debugger看"},'#801e00')
+      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 2858, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更新方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"}, [66, 70])
       console.log("%c\n       ", "font-size:380px;background:url('https://s1.ax1x.com/2018/12/15/FUIj4H.png') no-repeat");
       vm.$el = vm.__patch__(prevVnode, vnode);
-      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 11, {}, [66, 70])
-      segmentLine('vm._update(vm._render())','', 'end', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',}, [63, 71])
+      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 2861, ['页面上已经变成‘jike’'], [66, 70])
+      segmentLine('vm._update(vm._render())','', 'end', 2862, {}, [63, 71])
     }
     activeInstance = prevActiveInstance;
     // update __vue__ reference
@@ -2984,7 +2984,7 @@ function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
-  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', '', 11, {'1这里的updateComponent为':'updateCompnent = function () {vm._update(vm._render(), hydrating)}', '3vm._update()作用': '将虚拟DOM渲染成真正的DOM',"2vm._render()": '其实就是在vm作用下执行27步生成的渲染函数字符串,最终生成虚拟DOM'}, [30, 50])
+  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', '', 2987, {'1updateComponent为':'updateCompnent = function () {vm._update(vm._render(), hydrating)}', '3vm._update()作用': '将虚拟DOM渲染成真正的DOM',"2vm._render()": '其实就是在vm作用下执行第27步生成的渲染函数字符串(code.render),最终执行结果会生成虚拟DOM', '4 new Watcher()':'会触发name的get函数,把自己收集到name的dep里(下面图会讲解)'}, [30, 50])
   new Watcher(vm, updateComponent, noop, {
     before: function before () {
       if (vm._isMounted) {
@@ -2993,7 +2993,7 @@ function mountComponent (
       }
     }
   }, true /* isRenderWatcher */);
-  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', 'end', 11, ['数据响应完成,当更新时会触发'], [30, 50])
+  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', 'end', 2996, ['数据响应完成,当发生数据更新时,会触发它'], [30, 50])
 
   hydrating = false;
 
@@ -3001,7 +3001,7 @@ function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true;
-    hookFunc('mounted', {'1实现': "callHook(vm, 'mounted')其实就是取出开发者写options的mounted执行", '其它': '同上面钩子函数'}) 
+    hookFunc('mounted', {'1实现': "callHook(vm, 'mounted')其实就是取出开发者写options的mounted执行", '2': '你可以在这里进行dom操作'}) 
     callHook(vm, 'mounted');
 
   }
@@ -3353,15 +3353,15 @@ Watcher.prototype.get = function get () {
   var vm = this.vm;
   try {
     if (!consoleInUpdate) {
-      segmentLine('updateComponent()','', '', 11, ['这里面对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据29步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [31, 48])
+      segmentLine('updateComponent()','', '', 3356, ['这里面会对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据30步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [31, 49])
     } else {
-      segmentLine('updateComponent()','', '', 11, ['updateComponent()执行(基本初始化差不多,只不过回vm._update()的patch函数会不同,它会对比新旧vnode的变化,再更新),会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [55, 71])
+      segmentLine('updateComponent()','', '', 3358, ['updateComponent()执行(基本初始化差不多,只不过回vm._update()的patch函数会不同,它会对比新旧vnode的变化,再更新变化,效率大大提高),会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [55, 72])
     }
     value = this.getter.call(vm, vm);
     if (!consoleInUpdate) {
-      segmentLine('updateComponent()','', 'end', 11, {}, [31, 48])
+      segmentLine('updateComponent()','', 'end', 3362, {}, [31, 49])
     } else {
-      segmentLine('updateComponent()','', 'end', 11, {}, [55, 71])
+      segmentLine('updateComponent()','', 'end', 3364, ['更新视图结束...'], [55, 72])
     }
   } catch (e) {
     if (this.user) {
@@ -3554,12 +3554,12 @@ function initState (vm) {
   var opts = vm.$options;
   if (opts.props) { initProps(vm, opts.props); }
   if (opts.methods) { initMethods(vm, opts.methods); }
-  tagVariable('initMethods(vm, opts.methods)', 'initMethods(vm, opts.methods)', '在vm实例上定义methods里的同名方法,值为methods相对应的函数', 4905, [`循环methods选项,key是methods里的函数名'vm[key] = methods[key] == null ? noop : bind(methods[key]], vm);'`,'bind(methods[key]], vm)会将每个函数this指向vm实例',
+  tagVariable('initMethods(vm, opts.methods)', 'initMethods(vm, opts.methods)', '在vm实例上定义methods里的同名方法,值为methods相对应的函数', 3557, [`循环methods选项,key是methods里的函数名'vm[key] = methods[key] == null ? noop : bind(methods[key]], vm);'`,'bind(methods[key]], vm)会将每个函数this指向vm实例',
       {'vm.changeName就变成': 'function () {this.name = "jike"}'}], '#0F9')
   if (opts.data) {
-    segmentLine('initData(vm)','', '', 11, ['这里会将开始数据响应(双向数据绑定)'],[17,21])
+    segmentLine('initData(vm)','', '', 3560, ['这里会将开始数据响应(双向数据绑定)'],[17,21])
     initData(vm);
-    segmentLine('initData(vm)','', 'end', 11, ['到这一步时,vm.name的取值,和设置值我们就能拦截到了'],[17,21])
+    segmentLine('initData(vm)','', 'end', 3562, ['到这一步时,vm.name的取值,和设置值我们就能拦截到了'],[17,21])
   } else {
     observe(vm._data = {}, true /* asRootData */);
   }
@@ -3653,15 +3653,15 @@ function initData (vm) {
       );
     } else if (!isReserved(key)) {
       proxy(vm, "_data", key);
-      tagVariable('proxy(vm, "_data", key)', 'proxy(vm, "_data", key)', '将data的属性代理到vm实例上', 4905, ['该例子为例,你可以访问vm.name,其实就是访问vm._data.name;_data就是你传入的选项里的data'], '#FF3030')
+      tagVariable('proxy(vm, "_data", key)', 'proxy(vm, "_data", key)', '将data的属性代理到vm实例上', 3656, ['该例子为例,你可以访问vm.name,其实就是访问vm._data.name;_data就是你传入的选项里的data'], '#FF3030')
     }
   }
   // observe data
-  tagVariable('observe(data, true)', '观测data', '可以监控到name的取值,和设置值', 4905, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
+  tagVariable('observe(data, true)', '观测data', '可以监控到name的取值,和设置值', 3660, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
 
   observe(data, true /* asRootData */);
   console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhoz6.png') no-repeat");
-  tagVariable('如上图观察data里的name', 'data', '变为访问属性(set, get)', 4905, {'vm._data': vm._data}, '#613839')  
+  tagVariable('如上图观察data里的name', 'data', '变为访问属性(set, get)', 3664, {'vm._data': vm._data}, '#613839')  
 }
 
 function getData (data, vm) {
@@ -4682,12 +4682,12 @@ function _createElement (
     vnode = createComponent(tag, data, context, children);
   }
   if (data.on) {
-    tagVariable("再接着执行_c('div',{attrs:{'id':'hi'},on:{'click':changeName}}, ['上一步的生成的_v()生成的文本节点'])", '_c()', '_c()就是函数createElement,用来创建虚拟DOM的一般节点', 11,{'_c()值': vnode , 'tip': '这里_c()收到三个参数', 'vnode结构':'两层结构'}, '#006ba2')
+    tagVariable("再接着执行_c('div',{attrs:{'id':'hi'},on:{'click':changeName}}, ['上一步的生成的_v()生成的文本节点'])", '_c()', '_c()就是函数createElement,用来创建虚拟DOM的一般节点', 4685,{'_c()值': vnode , '1': '这里_c()收到三个参数', '_c()生成的vnode结构':'两层结构'}, '#006ba2')
   } else {
     if (!consoleInUpdate) {
-      tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 11,{'_c()值': vnode , 'vnode结构':'三层结构(html的dom相对)', 'sum': '该值就是最终要的虚拟dom(vnode)'}, '#b04800')
+      tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 4688,{'_c()值': vnode , 'vnode结构':'三层结构(html的dom相对)', 'sum': '该值就是最终要的虚拟dom(vnode)'}, '#b04800')
     } else {
-      tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 11,{'新的vnode值': vnode }, '#b04800')
+      tagVariable("最后执行_c('div',{attrs:{'id':'app'}, ['上一步的生成的_c()生成的虚拟节点'])", '_c()', '_c()就是函数createElement,同上', 4690,{'新的vnode值': vnode }, '#b04800')
     }
   }
   if (Array.isArray(vnode)) {
@@ -4798,17 +4798,17 @@ function renderMixin (Vue) {
     var vnode;
     try {
       if (!consoleInUpdate) {
-        segmentLine('vm._render()','', '', 11, ['通过new Function(){code}执行渲染函数的字符串代码'], [32,38])
-        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')        
+        segmentLine('vm._render()','', '', 4801, ['通过new Function(){code}执行渲染函数的字符串代码'], [32,38])
+        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4802, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')        
       } else {
-        segmentLine('vm._render()','', '', 11, ['同上,不过name的值已经变为“jike”,将会生成新的vnode'], [56, 62])
-        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
+        segmentLine('vm._render()','', '', 4804, ['同上,不过name的值已经变为“jike”,将会生成新的vnode'], [56, 62])
+        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4805, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
       }
       vnode = render.call(vm._renderProxy, vm.$createElement);
       if (!consoleInUpdate) { 
-        segmentLine('vm._render()','', 'end', 11, {'vnode值': vnode}, [32, 38])
+        segmentLine('vm._render()','', 'end', 4809, {'vnode值': vnode}, [32, 38])
       } else {
-        segmentLine('vm._render()','', 'end', 11, {'新的vnode值': vnode}, [56, 62])
+        segmentLine('vm._render()','', 'end', 4811, {'新的vnode值': vnode}, [56, 62])
       }
     } catch (e) {
       handleError(e, vm, "render");
@@ -4877,7 +4877,7 @@ function initMixin (Vue) {
         options || {},
         vm
       );
-      tagVariable('vm.$options = mergeOptions(reso..,options||{},vm)', 'mergeOptions()', '对开发者传入的选项进行处理,形成统一的格式', 4905, 
+      tagVariable('vm.$options = mergeOptions(reso..,options||{},vm)', 'mergeOptions()', '对开发者传入的选项进行处理,形成统一的格式', 4880, 
       {'1开发者手写选项':options, '2经mergeOptions处理后选项':vm.$options,
        '3处理后options说明': `data被处理成一个函数mergedInstanceDataFn,这个函数执行回调的值就是{name: '点我'},添加_base属性指向Vue构造函数`,
        '4额外说明':'mergeOptions()还会处理props,钩子函数等,最后赋值给vm.$options,例子:在5,6点',
@@ -4887,17 +4887,17 @@ function initMixin (Vue) {
     /* istanbul ignore else */
     {
       initProxy(vm);
-      tagVariable('initProxy(vm)', 'initProxy(vm)', '在实例上添加_renderProxy,值是vm实例', 4905, `vm._renderProxy = vm`, '#888')
+      tagVariable('initProxy(vm)', 'initProxy(vm)', '在实例上添加_renderProxy,值是vm实例', 4890, `vm._renderProxy = vm`, '#888')
     }
     // expose real self
     vm._self = vm;
     initLifecycle(vm);
-    tagVariable('initLifecycle(vm)', 'initLifecycle(vm)', '在实例上添加$children,$refs, $parent等', 4905, {'vm.$parent': '值为undefined,该组件没有父组件','vm.$children': '初始化为[]','vm.$refs': '初始化{}', 'vm._watcher': '初始化为null'}, '#336')
+    tagVariable('initLifecycle(vm)', 'initLifecycle(vm)', '在实例上添加$children,$refs, $parent等', 4895, {'vm.$parent': '值为undefined,该组件没有父组件','vm.$children': '初始化为[]','vm.$refs': '初始化{}', 'vm._watcher': '初始化为null'}, '#336')
     initEvents(vm);
-    tagVariable('initEvents(vm)', 'initEvents(vm)', '在实例上添加_events,$refs, _hasHookEvent等', 4905, {'vm._event': '初始化为{}','vm._hasHookEvent': '初始化为false'}, '#855')
+    tagVariable('initEvents(vm)', 'initEvents(vm)', '在实例上添加_events,$refs, _hasHookEvent等', 4897, {'vm._event': '初始化为{}','vm._hasHookEvent': '初始化为false'}, '#855')
 
     initRender(vm);
-    tagVariable('initRender(vm)', 'initRender(vm)', '在实例上添加_vnode,_staticTrees, $slot,_c, $createElement等', 4905, {'vm._node': '初始化为null','vm._staticTress': '初始化为null', 'vm._c': '(a, b, c, d) => createElement(vm, a, b, c, d, false)', 'vm.$createElement': '(a, b, c, d) => createElement(vm, a, b, c, d, true)'}, 'orange')
+    tagVariable('initRender(vm)', 'initRender(vm)', '在实例上添加_vnode,_staticTrees, $slot,_c, $createElement等', 4900, {'vm._node': '初始化为null','vm._staticTress': '初始化为null', 'vm._c': '(a, b, c, d) => createElement(vm, a, b, c, d, false)', 'vm.$createElement': '(a, b, c, d) => createElement(vm, a, b, c, d, true)'}, 'orange')
 
     hookFunc('beforeCreate', {'1实现': "callHook(vm, 'beforeCreate')其实就是取出开发者写options的beforeCreated执行", 
                               '2callHook': '在callHook有句代码vm.$options[hook][i].call(vm), 在vm实例作用域下执行,这是就是为什么我们可以在钩子函数里用this调用data数据,methods方法的原因',
@@ -4906,12 +4906,12 @@ function initMixin (Vue) {
                               '5': '下面打印的就是我写的beforeCreate钩子'}) 
     callHook(vm, 'beforeCreate');    
     initInjections(vm); // resolve injections before data/props
-    segmentLine('initState(vm)','', '', 11, 
+    segmentLine('initState(vm)','', '', 4909, 
   {1:'initState(vm)会对props、methods、data、computed 和 watch 等初始化',
    2:'我们的例子只会initData(vm), initMethods()',
    3:'props初始化早于data,所以你可以在data里使用props接收到的值'}, [15,22])
     initState(vm);
-    segmentLine('initState(vm)','', 'end', 11, ['初始化完成,在挂载阶段就可以通过实例访问data,methods,钩子函数等'], [15,22])
+    segmentLine('initState(vm)','', 'end', 4914, ['初始化完成,在挂载阶段就可以通过实例访问data,methods,钩子函数等'], [15,22])
     initProvide(vm); // resolve provide after data/props
         
     hookFunc('created', {'1实现': "callHook(vm, 'created')其实就是取出开发者写options的created执行", 
@@ -4931,9 +4931,9 @@ function initMixin (Vue) {
 
     if (vm.$options.el) {
       stageDesc('挂载阶段', '将我们写的组件挂载到给定元素(id=app)上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
-      segmentLine('vm.$mount(vm.$options.el)','', '', 11, ['将实现视图的渲染'],[24, 52])
+      segmentLine('vm.$mount(vm.$options.el)','', '', 4934, ['将实现视图的渲染'],[24, 52])
       vm.$mount(vm.$options.el);
-      segmentLine('vm.$mount(vm.$options.el)','', 'end', 11, [],[24, 52])
+      segmentLine('vm.$mount(vm.$options.el)','', 'end', 4936, [],[24, 52])
     }
   };
 }
@@ -5021,25 +5021,26 @@ function Vue (options) {
   ) {
     warn('Vue is a constructor and should be called with the `new` keyword');
   }
-  segmentLine('this._init(options)','', '', 11, 
+  segmentLine('this._init(options)','', '', 5024, 
   {1:'在vue-console.html文件里,我们通过new Vue({..})发生实例化,就是执行第1步的Vue构造函数,this._init(options)被执行',
    2:'执行this._init(options)就是第2步添加到Vue原型上的_init方法, 因为this指向vm(Vue的实例), options就是开发者写的选项内容',
    '3options':options,}, [8, 53])
   this._init(options);
-  segmentLine('this._init(options)','', 'end', 1, ['下图描述了整个数据响应,以及发生改变的更新过程'], [8, 53])
+  segmentLine('this._init(options)','', 'end', 5029, ['下图描述了整个数据响应,以及发生改变的更新过程'], [8, 53])
   console.log("%c\n       ", "font-size:390px;background:url('https://s1.ax1x.com/2018/12/14/FU0Wzd.png') no-repeat");
+  console.log('%c请点击页面的“点我”,将发生页面的更新过程','font-size: 20px;color:red')
 }
-tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '声明构造函数,但是还没执行', 4905, ['代码运行到这里时,只定义Vue函数,没执行(注:打印出来是省略的代码)'])
+tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '声明构造函数,但是还没执行', 5033, ['代码运行到这里时,只定义Vue函数,没执行(注:打印出来是省略的代码)'])
 initMixin(Vue);
-tagVariable('initMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加_init属性', 4911, ['initMixin(Vue), 以上一步定义的Vue构造函数为参,在它原型上添加_init,_init()用于初始化的过程后面再讲'], 'grey')
+tagVariable('initMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加_init属性', 5035, ['initMixin(Vue), 以上一步定义的Vue构造函数为参,在它原型上添加_init,_init()用于初始化的过程后面再讲'], 'grey')
 stateMixin(Vue);
-tagVariable('stateMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 4912, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#da70d6')
+tagVariable('stateMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 5037, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#da70d6')
 eventsMixin(Vue);
-tagVariable('eventMixin(Vue)', 'eventMixin(Vue)','在Vue原型上添加$on, $once, $offset, $emit属性', 4914, ['eventMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#67C23A')
+tagVariable('eventMixin(Vue)', 'eventMixin(Vue)','在Vue原型上添加$on, $once, $offset, $emit属性', 5039, ['eventMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#67C23A')
 lifecycleMixin(Vue);
-tagVariable('lifecycleMixin(Vue)', 'lifecycleMixin(Vue)','在Vue原型上添加_update, $forceUpdate, $destory属性', 4914, ['lifecycleMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#F56C6C')
+tagVariable('lifecycleMixin(Vue)', 'lifecycleMixin(Vue)','在Vue原型上添加_update, $forceUpdate, $destory属性', 5041, ['lifecycleMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#F56C6C')
 renderMixin(Vue);
-tagVariable('renderMixin(Vue)', 'renderMixin(Vue)','在Vue原型上添加$nextTick, _render, 等一些列属性', 4914, ['属性包括:_o,_n,_s,_l,_t,_q,_m......'], 'red')
+tagVariable('renderMixin(Vue)', 'renderMixin(Vue)','在Vue原型上添加$nextTick, _render, 等一些列属性', 5043, ['属性包括:_o,_n,_s,_l,_t,_q,_m......'], 'red')
 
 
 /*  */
@@ -5378,7 +5379,7 @@ function initGlobalAPI (Vue) {
 }
 
 initGlobalAPI(Vue);
-tagVariable('initGlobalAPI(Vue)', 'initGlobalAPI(Vue)','在Vue上添加静态属性:config, use, options,util, set, delete,extend 等', 4914, ['静态属性不同与原型上的属性,静态属性只能通过Vue访问,例:用插件时Vue.use(ElementUI),创建组件Vue.extend({..})', '原型上的属性一般通过实例访问,例:设置变量值this.$set(obj, key, value), 这里的this就是指向vm(Vue的实例)'], '#bbb')
+tagVariable('initGlobalAPI(Vue)', 'initGlobalAPI(Vue)','在Vue上添加静态属性:config, use, options,util, set, delete,extend 等', 5382, ['静态属性不同与原型上的属性,静态属性只能通过Vue访问,例:用插件时Vue.use(ElementUI),创建组件Vue.extend({..})', '原型上的属性一般通过实例访问,例:设置变量值this.$set(obj, key, value), 这里的this就是指向vm(Vue的实例)'], '#bbb')
 
 sumText('前面1~6步是对Vue.prototype原型的加工(添加很多属性和方法,以后可以通过实例访问),第7步Vue添加了静态属性和方法;以上7步未使用new Vue({..})之前就完成,其实就是<script src="./vue.js"></script>引入时就完成了')
 
@@ -5892,9 +5893,9 @@ function createPatchFunction (backend) {
       setScope(vnode);
       if (!consoleInUpdate) {
         if (data.attrs.id === 'app') {
-          tagVariable(nodeOps.createElement(tag, vnode), 'vnode(id=app)添加elm属性 ', '值为<div></div>', 4905, [`vnode层级: {id=app,children:[{id:hi,children:[{text:‘点我’}]}]}`], '#7fffa6')
+          tagVariable(nodeOps.createElement(tag, vnode), 'vnode(id=app)添加elm属性 ', '值为<div></div>', 5896, [`vnode层级: {id=app,children:[{id:hi,children:[{text:‘点我’}]}]}`], '#7fffa6')
         } else {
-          tagVariable(nodeOps.createElement(tag, vnode), 'vnode(id=hi)添加elm属性 ', '值为<div></div>', 4905, [`vnode层级:{id:hi,children:[{text:‘点我’}]}`], '#803005')
+          tagVariable(nodeOps.createElement(tag, vnode), 'vnode(id=hi)添加elm属性 ', '值为<div></div>', 5898, [`vnode层级:{id:hi,children:[{text:‘点我’}]}`], '#803005')
         }
       }
       /* istanbul ignore if */
@@ -5905,9 +5906,9 @@ function createPatchFunction (backend) {
         }
         insert(parentElm, vnode.elm, refElm);
         if (data.attrs.id !== 'app') {
-          tagVariable('insert(parentElm, vnode.elm, refElm);', 'insert()方法给某dom(parentElm)添加子dom(vnode.elm)', '将id=hi的dom通过appendChild添加到id=‘app’的dom上', 4905, {parentElm: parentElm, 'vnode.elm': vnode.elm}, '#8a9cff')        
+          tagVariable('insert(parentElm, vnode.elm, refElm);', 'insert()方法给某dom(parentElm)添加子dom(vnode.elm)', '将id=hi的dom通过appendChild添加到id=‘app’的dom上', 5909, {parentElm: parentElm, 'vnode.elm': vnode.elm}, '#8a9cff')        
         } else {
-          tagVariable('insert(parentElm, vnode.elm, refElm);', 'insert()方法给某dom(parentElm)添加子dom(vnode.elm)', '将id=app的dom通过appendChild添加到body上', 4905, {parentElm: parentElm, 'vnode.elm': vnode.elm}, '#dc3800')        
+          tagVariable('insert(parentElm, vnode.elm, refElm);', 'insert()方法给某dom(parentElm)添加子dom(vnode.elm)', '将id=app的dom通过appendChild添加到body上', 5911, {parentElm: parentElm, 'vnode.elm': vnode.elm}, '#dc3800')        
         }
       }
 
@@ -5919,7 +5920,7 @@ function createPatchFunction (backend) {
       insert(parentElm, vnode.elm, refElm);
     } else {
       vnode.elm = nodeOps.createTextNode(vnode.text);
-      tagVariable(nodeOps.createTextNode(vnode.text), 'vnode(text="点我")添加elm属性 ', '值为真实dom的文本节点', 4905, [`将该文本节点,先通过update*方法更新dom属性(这里没什么更新的), 把它append到42步的vnode(id=hi)的elm属性值的dom上`], '#007678')
+      tagVariable(nodeOps.createTextNode(vnode.text), 'vnode(text="点我")添加elm属性 ', '值为真实dom的文本节点', 5923, [`将该文本节点,先通过update*方法更新dom属性(这里没什么更新的), 把它append到43步的vnode(id=hi)的elm属性值的dom上`], '#007678')
       insert(parentElm, vnode.elm, refElm);
     }
   }
@@ -6223,11 +6224,11 @@ function createPatchFunction (backend) {
 
     var elm = vnode.elm = oldVnode.elm;  // 将原来dom复制到新的虚拟节点的elm上
     if (elm.id === 'app') {
-      tagVariable(elm, 'dom(id=app)', '三层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#0000b2')
+      tagVariable(elm, 'dom(id=app)', '三层结构', 6227, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#0000b2')
     } else if (elm.id === 'hi') {
-      tagVariable(elm, 'dom(id=app)', '两层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#96b1f0')
+      tagVariable(elm, 'dom(id=app)', '两层结构', 6229, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#96b1f0')
     } else {
-      tagVariable(elm, 'dom(text="jike")', '一层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧都是文本节点,只需要替换文本内容'], '#800080')
+      tagVariable(elm, 'dom(text="jike")', '一层结构', 6231, ['建议用debugger模式看,console.log出来dom不准确', '新旧都是文本节点,只需要替换文本内容'], '#800080')
     }
     
 
@@ -6416,7 +6417,7 @@ function createPatchFunction (backend) {
   }
 
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
-    if (!consoleInUpdate) {tagVariable(vnode, 'vnode(id=app)', '三层结构', 4905, [], '#800080')}
+    if (!consoleInUpdate) {tagVariable(vnode, 'vnode(id=app)', '三层结构', 6420, [], '#800080')}
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) { invokeDestroyHook(oldVnode); }
       return
@@ -11177,14 +11178,14 @@ var createCompiler = createCompilerCreator(function baseCompile (
   template,
   options
 ) {
-  tagVariable(template, 'template', '这里的template就是上一步id=app的dom的outerHTML的值', 4905, [`template的是一个字符串(包括换行符), 将用来生成抽象语法树(ast)`], '#800080')
+  tagVariable(template, 'template', '这里的template就是上一步id=app的dom的outerHTML的值', 11181, [`template的是一个字符串(包括换行符), 将用来生成抽象语法树(ast)`], '#800080')
   var ast = parse(template.trim(), options);
-  tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '将模版字符串(template)转化成ast(抽象语法树)', 4905, {1:"将字符串通过正则生成树形结构的数据(每一层数据对应相对应的dom)","ast": ast, "说明": 'dom是三层对象,所以ast也是三层的'  }, '#7fff7f')
+  tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '将模版字符串(template)转化成ast(抽象语法树)', 11183, {1:"将字符串通过正则生成树形结构的数据(每一层数据对应相对应的dom)","ast": ast, "说明": 'dom是三层对象,所以ast也是三层的'  }, '#7fff7f')
   if (options.optimize !== false) {
     optimize(ast, options);
   }
   var code = generate(ast, options);
-  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code包括render和staticRenderFns':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面是通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 这段代码结果会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
+  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 11188, {'1code包括render和staticRenderFns':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面是通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 这段代码结果会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
   jiketemplate = code.render
   return {
     ast: ast,
@@ -11227,7 +11228,7 @@ Vue.prototype.$mount = function (
   hydrating
 ) {
   el = el && query(el);
-  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值),`, el, 'query(el): document.querySelector(el)通过它获取dom'], '#FF359A')
+  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 11231, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值),`, el, 'query(el): document.querySelector(el)通过它获取dom'], '#FF359A')
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
