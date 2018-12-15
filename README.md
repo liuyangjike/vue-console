@@ -8,8 +8,8 @@
 `vue-console` 通过console.log结合vue的源代码,通过一个简单的例子,观察Vue各个过程的变化
 
 ## 在线演示
-
-<!-- [演示文档](http://www.goingtrace.com) -->
+>请用chrome查看,并打开控制台看效果
+[演示文档](http://www.vue-console.xyz/)
 
 
 
