@@ -125,6 +125,23 @@ var stageTitleStyle = [
   'padding: 5px 10px'
 ].join(';')
 
+var startTitle = [
+  'font-size: 22px',
+  'color: #222',
+  'background-color: #ddd',
+  'border-radius: 5px',
+  'padding: 5px 10px',
+  'margin-left: 38%'
+].join(';')
+
+var startContent = [
+  'font-size: 16px',
+  'color: #409EFF',
+  'border-radius: 5px',
+  'padding: 5px 10px',
+  'margin-left: 20%'
+].join(';')
+
 
 var hookFunc = function (name, obj) {
   console.log(`%c${lineNo} %c生命周期钩子${name} %c说明:%o`, noStyle, hookStyle, detailStyle,obj)
@@ -149,27 +166,13 @@ var sumText = function (content) {
   console.log(`%c上一阶段总结: %c${content}`, sumTitleStyle, sumTextStyle)
 }
 
+var startText = function () {
+  console.log('%c项目介绍', startTitle)
+  console.log('%c1. 该项目会以一个简单的例子讲解整个Vue变化,追踪各个过程的变化, \n2.你需要对js的原型、作用域、闭包有所了解\n3.本文不会做非常详细的讲解,如果想看具体的可以看最后参考的文章\n4.console打印出来的某些值不一定准确(建议配合debugger模式看)', startContent)
+}
 
 
-var styles = [
-  'color: blue', 
-  'background: yellow', 
-  'font-size: 18px',
-  'border-radius: 2px',
-].join(';')
-var textstyle = [
-  'color: red', 
-  'background: #ddd', 
-  'font-size: 16px',
-  'border-radius: 3px',
-  'border: 1px solid #aaa'
-].join(';')
-var paramStyle = [
-  'color: blue', 
-  'font-size: 18px',
-  'border-radius: 3px',
-  'border: 1px solid #aaa'
-].join(';')
+startText()
 
 //=====console.log=========
 
@@ -1176,6 +1179,7 @@ function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
+      stageDesc('更新阶段', '点击文本发生的更新过程',['该阶段通过name的set函数拦截name的值变化,触发观察者完成更新视图的过程(如上图的考生要修改答案开始道结束)'])
       var value = getter ? getter.call(obj) : val;
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
@@ -2839,7 +2843,7 @@ function lifecycleMixin (Vue) {
       tagVariable(prevVnode, 'prevVnode', '旧的虚拟dom(“点我”那个时候的)', 1, {},'#e680ff')
       tagVariable(vnode, 'vnode', '新的虚拟dom(‘jike’这个时候)', 1, {"注意": "由于console异步的,打印出来不对,此时新vnode.elm为undefined,建议用debugger看"},'#801e00')
       segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 11, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更小方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"})
-      console.log("%c\n       ", "font-size:380px;background:url('https://s1.ax1x.com/2018/12/15/FU5nij.png') no-repeat");
+      console.log("%c\n       ", "font-size:380px;background:url('https://s1.ax1x.com/2018/12/15/FUIj4H.png') no-repeat");
       vm.$el = vm.__patch__(prevVnode, vnode);
       segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 11, {})
     }
@@ -2855,7 +2859,6 @@ function lifecycleMixin (Vue) {
     if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
       vm.$parent.$el = vm.$el;
     }
-    console.log('%cvm_update()--**------ending------**---', textstyle)
     // updated hook is called by the scheduler to ensure that children are
     // updated in a parent's updated hook.
   };
@@ -4994,6 +4997,8 @@ function dedupe (latest, extended, sealed) {
     return latest
   }
 }
+stageDesc('构造函数阶段', '对Vue构造函数的加工',['在它上面添原型属性或方法,或者添加静态属性,为初始化作准备'])
+
 function Vue (options) {
   if ("development" !== 'production' &&
     !(this instanceof Vue)
@@ -5610,7 +5615,6 @@ function createElement$1 (tagName, vnode) {
   if (vnode.data && vnode.data.attrs && vnode.data.attrs.multiple !== undefined) {
     elm.setAttribute('multiple', 'multiple');
   }
-  console.log('%ccreateElement$1--**------ending------**--', textstyle)
   return elm
 }
 

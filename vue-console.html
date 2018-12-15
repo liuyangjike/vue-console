@@ -32,6 +32,12 @@
       mounted () {
         console.log('%cI am mounted------ 我在选项里写的', 'font-size: 20px;color: #028')
       },
+      beforeUpdate () {
+        console.log('%cI am beforeUpdate------ 我在选项里写的', 'font-size: 20px;color: #619')
+      },
+      updated () {
+        console.log('%cI am updated------ 我在选项里写的', 'font-size: 20px;color: #619')
+      },
       methods: {
         changeName () {
           this.name = 'jike'
