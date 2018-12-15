@@ -135,10 +135,9 @@ var startTitle = [
 ].join(';')
 
 var startContent = [
-  'font-size: 16px',
+  'font-size: 15px',
   'color: #409EFF',
-  'border-radius: 5px',
-  'padding: 5px 10px',
+  'padding: 2px',
   'margin-left: 20%'
 ].join(';')
 
@@ -155,9 +154,10 @@ var hookFunc = function (name, obj) {
   lineNo++
 }
 
-var segmentLine = function (content, color, text, num, detail) {
+var segmentLine = function (content, color, text, num, detail, line) {
+  line = line?line:[0, 0]
   text = text?text:'start'
-  console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', text==='end'?17:15)}|%c源码${num}行 %c说明: %o`, noStyle, variStyle(color), segStyleLine,segStyleTag(), segStyleLine, sourceNoStyle, detailStyle, detail)
+  console.log(`%c${lineNo} %c${content}%c${generateSymbol('-', 15)}%c**==${text}==**%c${generateSymbol('-', text==='end'?17:15)}|%c源码${num}行 %c从${line[0]}步执行到${line[1]}步结束 %c说明: %o`, noStyle, variStyle(color), segStyleLine,segStyleTag(), segStyleLine, sourceNoStyle, '',detailStyle, detail)
   lineNo++
 }
 var tagVariable = function (obj, tag, desc, num, detail, color) {
@@ -2834,7 +2834,7 @@ function initLifecycle (vm) {
 
 function lifecycleMixin (Vue) {
   Vue.prototype._update = function (vnode, hydrating) {
-    segmentLine('vm._update(vm._render())','', '', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',})
+    segmentLine('vm._update(vm._render())','', '', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',}, !consoleInUpdate?[39, 48]:[63, 71])
     var vm = this;
     var prevEl = vm.$el;
     var prevVnode = vm._vnode;
@@ -2846,18 +2846,20 @@ function lifecycleMixin (Vue) {
     if (!prevVnode) {
       // initial render
  
-      segmentLine('初始化的vm.__patch__()','', '', 11, {'vm._patch__()':'虚拟dom映射成真实的dom', '下图就是整个patch实现过程图': '',})
+      segmentLine('初始化的vm.__patch__()','', '', 11, {'vm._patch__()':'虚拟dom映射成真实的dom', '下图就是整个patch实现过程图': '',}, [40, 47])
       console.log("%c\n       ", "font-size:400px;background:url('https://s1.ax1x.com/2018/12/14/FUpeQU.png') no-repeat");      
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */);
-      segmentLine('初始化的vm.__patch__()','', 'end', 11, {})
+      segmentLine('初始化的vm.__patch__()','', 'end', 11, {}, [40, 47])
+      segmentLine('vm._update(vm._render())','', 'end', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',}, [39, 48])
     } else {
       // updates
       tagVariable(prevVnode, 'prevVnode', '旧的虚拟dom(“点我”那个时候的)', 1, {},'#e680ff')
       tagVariable(vnode, 'vnode', '新的虚拟dom(‘jike’这个时候)', 1, {"注意": "由于console异步的,打印出来不对,此时新vnode.elm为undefined,建议用debugger看"},'#801e00')
-      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 11, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更小方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"})
+      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 11, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更小方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"}, [66, 70])
       console.log("%c\n       ", "font-size:380px;background:url('https://s1.ax1x.com/2018/12/15/FUIj4H.png') no-repeat");
       vm.$el = vm.__patch__(prevVnode, vnode);
-      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 11, {})
+      segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 11, {}, [66, 70])
+      segmentLine('vm._update(vm._render())','', 'end', 11, {'vm._update':'将上一步生成的虚拟dom变为真实的dom',}, [63, 71])
     }
     activeInstance = prevActiveInstance;
     // update __vue__ reference
@@ -2982,7 +2984,7 @@ function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
-  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', '', 11, {'1这里的updateComponent为':'updateCompnent = function () {vm._update(vm._render(), hydrating)}', '3vm._update()作用': '将虚拟DOM渲染成真正的DOM',"2vm._render()": '其实就是在vm作用下执行27步生成的渲染函数字符串,最终生成虚拟DOM'})
+  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', '', 11, {'1这里的updateComponent为':'updateCompnent = function () {vm._update(vm._render(), hydrating)}', '3vm._update()作用': '将虚拟DOM渲染成真正的DOM',"2vm._render()": '其实就是在vm作用下执行27步生成的渲染函数字符串,最终生成虚拟DOM'}, [30, 50])
   new Watcher(vm, updateComponent, noop, {
     before: function before () {
       if (vm._isMounted) {
@@ -2991,7 +2993,7 @@ function mountComponent (
       }
     }
   }, true /* isRenderWatcher */);
-  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', 'end', 11, ['这里会将开始数据响应(双向数据绑定)'])
+  segmentLine('new Watcher(vm, updateComponent,noop,{..})','', 'end', 11, ['数据响应完成,当更新时会触发'], [30, 50])
 
   hydrating = false;
 
@@ -3351,15 +3353,15 @@ Watcher.prototype.get = function get () {
   var vm = this.vm;
   try {
     if (!consoleInUpdate) {
-      segmentLine('updateComponent()','', '', 11, ['这里面对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据29步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'])
+      segmentLine('updateComponent()','', '', 11, ['这里面对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据29步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [31, 48])
     } else {
-      segmentLine('updateComponent()','', '', 11, ['updateComponent()执行(基本初始化差不多,只不过回vm._update()的patch函数会不同,它会对比新旧vnode的变化,再更新),会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'])
+      segmentLine('updateComponent()','', '', 11, ['updateComponent()执行(基本初始化差不多,只不过回vm._update()的patch函数会不同,它会对比新旧vnode的变化,再更新),会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [55, 71])
     }
     value = this.getter.call(vm, vm);
     if (!consoleInUpdate) {
-      segmentLine('updateComponent()','', 'end', 11)
+      segmentLine('updateComponent()','', 'end', 11, {}, [31, 48])
     } else {
-      segmentLine('updateComponent()','', 'end', 11)
+      segmentLine('updateComponent()','', 'end', 11, {}, [55, 71])
     }
   } catch (e) {
     if (this.user) {
@@ -3555,9 +3557,9 @@ function initState (vm) {
   tagVariable('initMethods(vm, opts.methods)', 'initMethods(vm, opts.methods)', '在vm实例上定义methods里的同名方法,值为methods相对应的函数', 4905, [`循环methods选项,key是methods里的函数名'vm[key] = methods[key] == null ? noop : bind(methods[key]], vm);'`,'bind(methods[key]], vm)会将每个函数this指向vm实例',
       {'vm.changeName就变成': 'function () {this.name = "jike"}'}], '#0F9')
   if (opts.data) {
-    segmentLine('initData(vm)','', '', 11, ['这里会将开始数据响应(双向数据绑定)'])
+    segmentLine('initData(vm)','', '', 11, ['这里会将开始数据响应(双向数据绑定)'],[17,21])
     initData(vm);
-    segmentLine('initData(vm)','', 'end', 11, ['到这一步时,vm.name的取值,和设置值我们就能拦截到了'])
+    segmentLine('initData(vm)','', 'end', 11, ['到这一步时,vm.name的取值,和设置值我们就能拦截到了'],[17,21])
   } else {
     observe(vm._data = {}, true /* asRootData */);
   }
@@ -3655,10 +3657,11 @@ function initData (vm) {
     }
   }
   // observe data
-  segmentLine('observe(data, true)','', '', 11, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'])
+  tagVariable('observe(data, true)', '观测data', '变为访问属性(set, get)', 4905, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
+
   observe(data, true /* asRootData */);
   console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhoz6.png') no-repeat");
-  tagVariable('如上图观察data里的name', 'data', '变为访问属性(set, get)', 4905, {'vm._data': vm._data}, '#613030')  
+  tagVariable('如上图观察data里的name', 'data', '变为访问属性(set, get)', 4905, {'vm._data': vm._data}, '#613839')  
 }
 
 function getData (data, vm) {
@@ -4796,17 +4799,17 @@ function renderMixin (Vue) {
     var vnode;
     try {
       if (!consoleInUpdate) {
-        segmentLine('vm._render()','', '', 11, ['通过new Function(){code}执行渲染函数的字符串代码'])
+        segmentLine('vm._render()','', '', 11, ['通过new Function(){code}执行渲染函数的字符串代码'], [32,38])
         tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')        
       } else {
-        segmentLine('vm._render()','', '', 11, ['同上,不过name的值已经变为“jike”,将会生成新的vnode'])
+        segmentLine('vm._render()','', '', 11, ['同上,不过name的值已经变为“jike”,将会生成新的vnode'], [56, 62])
         tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4905, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
       }
       vnode = render.call(vm._renderProxy, vm.$createElement);
       if (!consoleInUpdate) { 
-        segmentLine('vm._render()','', 'end', 11, {'vnode值': vnode})
+        segmentLine('vm._render()','', 'end', 11, {'vnode值': vnode}, [32, 38])
       } else {
-        segmentLine('vm._render()','', 'end', 11, {'新的vnode值': vnode})
+        segmentLine('vm._render()','', 'end', 11, {'新的vnode值': vnode}, [56, 62])
       }
     } catch (e) {
       handleError(e, vm, "render");
@@ -4908,8 +4911,9 @@ function initMixin (Vue) {
     segmentLine('initState(vm)','', '', 11, 
   {1:'initState(vm)会对props、methods、data、computed 和 watch 等初始化',
    2:'我们的例子只会initData(vm), initMethods()',
-   3:'props初始化早于data,所以你可以在data里使用props接收到的值'})
+   3:'props初始化早于data,所以你可以在data里使用props接收到的值'}, [15,22])
     initState(vm);
+    segmentLine('initState(vm)','', 'end', 11, {}, [15,22])
     initProvide(vm); // resolve provide after data/props
         
     hookFunc('created', {'1实现': "callHook(vm, 'created')其实就是取出开发者写options的created执行", 
@@ -4929,8 +4933,9 @@ function initMixin (Vue) {
 
     if (vm.$options.el) {
       stageDesc('挂载阶段', '将我们写的组件挂载到给定元素上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
-      segmentLine('vm.$mount(vm.$options.el)','', '', 11)
+      segmentLine('vm.$mount(vm.$options.el)','', '', 11, ['将实现视图的渲染'],[24, 51])
       vm.$mount(vm.$options.el);
+      segmentLine('vm.$mount(vm.$options.el)','', 'end', 11, [],[24, 51])
     }
   };
 }
@@ -5021,9 +5026,9 @@ function Vue (options) {
   segmentLine('this._init(options)','', '', 11, 
   {1:'看第1步定义了Vue的钩子函数,new Vue({..})会实例化时,会执行this._init(options)',
    2:'执行this._init(options)就是第2步添加的_init方法, 因为this指向vm(Vue的实例)',
-   3:'参数options就是传递的{el:"#app",data()....},一个对象,开发者写的选项'})
+   3:'参数options就是传递的{el:"#app",data()....},一个对象,开发者写的选项'}, [8, 53])
   this._init(options);
-  segmentLine('this._init(options)','', 'end', 1)
+  segmentLine('this._init(options)','', 'end', 1, ['下图描述了整个数据响应,以及发生改变的更新过程'], [8, 53])
   console.log("%c\n       ", "font-size:390px;background:url('https://s1.ax1x.com/2018/12/14/FU0Wzd.png') no-repeat");
 }
 tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '声明构造函数,但是还没执行', 4905, ['代码运行到这里时,只定义Vue函数,没执行(注:打印出来是省略的代码)'])
@@ -5851,7 +5856,6 @@ function createPatchFunction (backend) {
     ownerArray,
     index
   ) {
-    console.log(vnode, insertedVnodeQueue, parentElm, refElm, '参数')
     if (isDef(vnode.elm) && isDef(ownerArray)) {
       // This vnode was used in a previous render!
       // now it's used as a new node, overwriting its elm would cause
