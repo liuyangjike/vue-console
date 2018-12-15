@@ -25,5 +25,5 @@
 
 ## 参考
 本项目参考了
-[Vue技术内幕](http://hcysun.me/vue-design/),
+[Vue技术内幕](http://hcysun.me/vue-design/)
 [Vue.js 源码解析](https://github.com/answershuto/learnVue)
