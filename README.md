@@ -18,7 +18,7 @@
 > 推荐一下我的另一个项目基于react的饿了吗项目(全家桶, 很适合react进阶用) [点这里](https://github.com/liuyangjike/react-elm)
 
 ## 启动
->1.克隆项目
+>1.克隆项目</br>
 >2.用chrome打开vue-console.html文件,再打开chrome控制台,就可以看到效果了
 
 
