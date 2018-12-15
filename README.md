@@ -9,7 +9,7 @@
 
 ## 在线演示
 >请用chrome查看,并打开控制台看效果
-[演示文档](http://www.vue-console.xyz/)
+[演示地址](http://www.vue-console.xyz/)
 
 
 
