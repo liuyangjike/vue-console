@@ -2839,7 +2839,7 @@ function lifecycleMixin (Vue) {
       tagVariable(prevVnode, 'prevVnode', '旧的虚拟dom(“点我”那个时候的)', 1, {},'#e680ff')
       tagVariable(vnode, 'vnode', '新的虚拟dom(‘jike’这个时候)', 1, {"注意": "由于console异步的,打印出来不对,此时新vnode.elm为undefined,建议用debugger看"},'#801e00')
       segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', '', 11, {'1此时vm._patch__()':'会将新旧虚拟dom对比,实现最小的更小方法,提高效率', '2下图就是整个patch对比新旧vnode的图': '如下图', '对比规则':"结构类似,同层之间对比"})
-    console.log("%c\n       ", "font-size:280px;background:url('https://s1.ax1x.com/2018/12/14/FU0dz9.png') no-repeat");
+      console.log("%c\n       ", "font-size:380px;background:url('https://s1.ax1x.com/2018/12/15/FU5nij.png') no-repeat");
       vm.$el = vm.__patch__(prevVnode, vnode);
       segmentLine('更新时的vm.__patch__(prevVnode, vnode)','', 'end', 11, {})
     }
@@ -2971,6 +2971,7 @@ function mountComponent (
   new Watcher(vm, updateComponent, noop, {
     before: function before () {
       if (vm._isMounted) {
+        hookFunc('beforeUpdate', {'在发生更新视图时会调用': "这里是点击后调用", '其它': '同上面钩子函数'}) 
         callHook(vm, 'beforeUpdate');
       }
     }
@@ -3208,6 +3209,7 @@ function callUpdatedHooks (queue) {
     var watcher = queue[i];
     var vm = watcher.vm;
     if (vm._watcher === watcher && vm._isMounted) {
+      hookFunc('updated', {'updated钩子': "更新视图完成后调用", '其它': '同上面钩子函数'}) 
       callHook(vm, 'updated');
     }
   }
@@ -3254,9 +3256,7 @@ function queueWatcher (watcher) {
     // queue the flush
     if (!waiting) {
       waiting = true;
-      console.log('%cflushSchedulerQueue--*------begining------**--', textstyle)
       nextTick(flushSchedulerQueue);
-      console.log('%cflushSchedulerQueue--*------ending------**--', textstyle)
     }
   }
 }
@@ -3360,7 +3360,6 @@ Watcher.prototype.get = function get () {
     popTarget();
     this.cleanupDeps();
   }
-  console.log('%cWathcer.get()-**--ending-**-', paramStyle)
   return value
 };
 
@@ -3430,9 +3429,7 @@ Watcher.prototype.update = function update () {
   } else if (this.sync) {
     this.run();
   } else {
-    console.log('%cqueueWathcer--**-------begining-------**', paramStyle)
     queueWatcher(this);
-    console.log('%cqueueWathcer--**-------ending-------**', paramStyle)
   }
 };
 
@@ -5605,11 +5602,8 @@ function query (el) {
 /*  */
 
 function createElement$1 (tagName, vnode) {
-  console.log('%ccreateElement$1--**------begining------**--', textstyle)
   var elm = document.createElement(tagName);
   if (tagName !== 'select') {
-    console.log(elm, '<---------vnode.elm')
-    console.log('%ccreateElement$1--**------ending------**--', textstyle)
     return elm
   }
   // false or null will remove the attribute but undefined will not
@@ -5986,20 +5980,16 @@ function createPatchFunction (backend) {
   }
 
   function createChildren (vnode, children, insertedVnodeQueue) {
-    console.log('%ccreateChildren--**------begining------**--', textstyle)
     if (Array.isArray(children)) {
       {
         checkDuplicateKeys(children);
       }
       for (var i = 0; i < children.length; ++i) {
-        console.log('%ccreateElm--**------begining------**--', paramStyle)
         createElm(children[i], insertedVnodeQueue, vnode.elm, null, true, children, i);
-        console.log('%ccreateElm--**------ending------**--', paramStyle)
       }
     } else if (isPrimitive(vnode.text)) {
       nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(String(vnode.text)));
     }
-    console.log('%ccreateChildren--**------ending------**--', textstyle)
   }
 
   function isPatchable (vnode) {
@@ -6110,8 +6100,6 @@ function createPatchFunction (backend) {
   }
 
   function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
-    console.log('%cupdateChildren--**------begin------**', paramStyle)
-    console.log(parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly)  // 这个时候还是点我
     var oldStartIdx = 0;
     var newStartIdx = 0;
     var oldEndIdx = oldCh.length - 1;
@@ -6137,9 +6125,7 @@ function createPatchFunction (backend) {
       } else if (isUndef(oldEndVnode)) {
         oldEndVnode = oldCh[--oldEndIdx];
       } else if (sameVnode(oldStartVnode, newStartVnode)) {
-        console.log('%cpatchVnode--**------begining------**', textstyle)
         patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue);
-        console.log('%cpatchVnode--**------ending------**', textstyle)
         oldStartVnode = oldCh[++oldStartIdx];
         newStartVnode = newCh[++newStartIdx];
       } else if (sameVnode(oldEndVnode, newEndVnode)) {
@@ -6183,7 +6169,6 @@ function createPatchFunction (backend) {
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
     }
-    console.log('%cupdateChildren--**------ending------**', paramStyle)
   }
 
   function checkDuplicateKeys (children) {
@@ -6218,6 +6203,14 @@ function createPatchFunction (backend) {
     }
 
     var elm = vnode.elm = oldVnode.elm;  // 将原来dom复制到新的虚拟节点的elm上
+    if (elm.id === 'app') {
+      tagVariable(elm, 'dom(id=app)', '三层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#800080')
+    } else if (elm.id === 'hi') {
+      tagVariable(elm, 'dom(id=app)', '两层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#800080')
+    } else {
+      tagVariable(elm, 'dom(text="jike")', '一层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧都是文本节点,只需要替换文本内容'], '#800080')
+    }
+    
 
     if (isTrue(oldVnode.isAsyncPlaceholder)) {
       if (isDef(vnode.asyncFactory.resolved)) {
@@ -6270,9 +6263,7 @@ function createPatchFunction (backend) {
         nodeOps.setTextContent(elm, '');
       }
     } else if (oldVnode.text !== vnode.text) {
-      console.log('%csetTextContent--**------begining------**--', paramStyle)
       nodeOps.setTextContent(elm, vnode.text);  // 将‘jike’设置到dom上
-      console.log('%csetTextContent--**------ending------**--', paramStyle)
     }
     if (isDef(data)) {
       if (isDef(i = data.hook) && isDef(i = i.postpatch)) { i(oldVnode, vnode); }
@@ -6422,9 +6413,7 @@ function createPatchFunction (backend) {
       var isRealElement = isDef(oldVnode.nodeType); // 新建时oldVnode是dom对象,存在nodeType, 更新时oldVnode是虚拟vnode
       if (!isRealElement && sameVnode(oldVnode, vnode)) {
         // patch existing root node
-        console.log('%cpatchVnode---**----begining------**---', paramStyle)
         patchVnode(oldVnode, vnode, insertedVnodeQueue, removeOnly);
-        console.log('%cpatchVnode---**----ending------**---', paramStyle)
       } else {
         if (isRealElement) {
           // mounting to a real element
@@ -6457,7 +6446,6 @@ function createPatchFunction (backend) {
         var oldElm = oldVnode.elm;
         var parentElm = nodeOps.parentNode(oldElm);
         // create new node
-        console.log('%c createElm--**-----begining-----**--', paramStyle)
         createElm(
           vnode,
           insertedVnodeQueue,
@@ -6467,7 +6455,6 @@ function createPatchFunction (backend) {
           oldElm._leaveCb ? null : parentElm,
           nodeOps.nextSibling(oldElm)
         );
-        console.log('%c createElm--**-----ending-----**--', paramStyle)
         // update parent placeholder node element, recursively
         if (isDef(vnode.parent)) {
           var ancestor = vnode.parent;
