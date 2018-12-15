@@ -143,6 +143,13 @@ var startContent = [
 ].join(';')
 
 
+var endTitle = [
+  'font-size: 20px',
+  'color: #555',
+  'background-color: #ff',
+  'border-radius: 5px',
+].join(';')
+
 var hookFunc = function (name, obj) {
   console.log(`%c${lineNo} %c生命周期钩子${name} %c说明:%o`, noStyle, hookStyle, detailStyle,obj)
   lineNo++
@@ -170,6 +177,10 @@ var sumText = function (content) {
 var startText = function () {
   console.log('%c项目介绍%c %chttps://github.com/liuyangjike/vue-console 欢迎star,感谢', startTitle, "font-size:30px;padding:0 10px;background:url('https://s1.ax1x.com/2018/12/15/FUqtun.png') -0px no-repeat", '')
   console.log('%c1. 该项目会以一个简单的例子讲解整个Vue变化,追踪各个过程的变化, \n2.你需要对js的原型、作用域、闭包有所了解\n3.本文不会做非常详细的讲解,如果想看具体的可以看最后参考的文章\n4.console打印出来的某些值不一定准确(建议配合debugger模式看)', startContent)
+}
+
+var endText = function () {
+  console.log('%c参考文章 %c\n 1.Vue技术内幕: http://hcysun.me/vue-design/  \n 2.Vue.js 源码解析 https://github.com/answershuto/learnVue', endTitle, '')
 }
 
 
@@ -3216,6 +3227,7 @@ function callUpdatedHooks (queue) {
       hookFunc('updated', {'updated钩子': "更新视图完成后调用", '其它': '同上面钩子函数'}) 
       callHook(vm, 'updated');
     }
+    endText()
   }
 }
 
@@ -5018,7 +5030,7 @@ tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '�
 initMixin(Vue);
 tagVariable('initMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加_init属性', 4911, ['initMixin(Vue), 以上一步定义的Vue构造函数为参,在它原型上添加_init,_init()用于初始化的过程后面再讲'], 'grey')
 stateMixin(Vue);
-tagVariable('stateMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 4912, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#409EFF')
+tagVariable('stateMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 4912, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#da70d6')
 eventsMixin(Vue);
 tagVariable('eventMixin(Vue)', 'eventMixin(Vue)','在Vue原型上添加$on, $once, $offset, $emit属性', 4914, ['eventMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#67C23A')
 lifecycleMixin(Vue);
@@ -6209,9 +6221,9 @@ function createPatchFunction (backend) {
 
     var elm = vnode.elm = oldVnode.elm;  // 将原来dom复制到新的虚拟节点的elm上
     if (elm.id === 'app') {
-      tagVariable(elm, 'dom(id=app)', '三层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#800080')
+      tagVariable(elm, 'dom(id=app)', '三层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#0000b2')
     } else if (elm.id === 'hi') {
-      tagVariable(elm, 'dom(id=app)', '两层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#800080')
+      tagVariable(elm, 'dom(id=app)', '两层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧vnode一样,不用更新'], '#96b1f0')
     } else {
       tagVariable(elm, 'dom(text="jike")', '一层结构', 4905, ['建议用debugger模式看,console.log出来dom不准确', '新旧都是文本节点,只需要替换文本内容'], '#800080')
     }
