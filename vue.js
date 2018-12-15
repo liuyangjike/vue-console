@@ -170,13 +170,13 @@ var stageDesc = function (title, content, obj) {
 }
 
 var sumText = function (content) {
-  console.log(`%c上一阶段总结: %c${content}`, sumTitleStyle, sumTextStyle)
+  console.log(`%c阶段总结: %c${content}`, sumTitleStyle, sumTextStyle)
 }
 
 
 var startText = function () {
   console.log('%c项目介绍%c %chttps://github.com/liuyangjike/vue-console 欢迎star,感谢', startTitle, "font-size:30px;padding:0 10px;background:url('https://s1.ax1x.com/2018/12/15/FUqtun.png') -0px no-repeat", '')
-  console.log('%c1. 该项目会以一个简单的例子讲解整个Vue变化,追踪各个过程的变化, \n2.你需要对js的原型、作用域、闭包有所了解\n3.本文不会做非常详细的讲解,如果想看具体的可以看最后参考的文章\n4.console打印出来的某些值不一定准确(建议配合debugger模式看)', startContent)
+  console.log('%c1. 该项目会以一个简单的例子讲解整个Vue变化,追踪各个过程, \n2.你需要对js的原型、作用域、闭包有所了解\n3.本文不会做非常详细的讲解,如果想看具体的可以看最后参考的文章\n4.console打印出来的某些值不一定准确(建议配合debugger模式看)', startContent)
 }
 
 var endText = function () {
@@ -3653,11 +3653,11 @@ function initData (vm) {
       );
     } else if (!isReserved(key)) {
       proxy(vm, "_data", key);
-      tagVariable('proxy(vm, "_data", key)', 'proxy(vm, "_data", key)', '将data的属性代理到vm实例上', 4905, ['该例子你可以访问vm.name,其实就是访问vm._data.name(_data就是你传入的data)'], '#FF3030')
+      tagVariable('proxy(vm, "_data", key)', 'proxy(vm, "_data", key)', '将data的属性代理到vm实例上', 4905, ['该例子为例,你可以访问vm.name,其实就是访问vm._data.name;_data就是你传入的选项里的data'], '#FF3030')
     }
   }
   // observe data
-  tagVariable('observe(data, true)', '观测data', '变为访问属性(set, get)', 4905, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
+  tagVariable('observe(data, true)', '观测data', '可以监控到name的取值,和设置值', 4905, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
 
   observe(data, true /* asRootData */);
   console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhoz6.png') no-repeat");
@@ -3765,7 +3765,6 @@ function createComputedGetter (key) {
 
 function initMethods (vm, methods) {
   var props = vm.$options.props;
-  console.log(methods)
   for (var key in methods) {
     {
       if (methods[key] == null) {
@@ -4888,12 +4887,11 @@ function initMixin (Vue) {
     /* istanbul ignore else */
     {
       initProxy(vm);
-      tagVariable('initProxy(vm)', 'initProxy(vm)', '在实例上添加_renderProxy,它的值vm实例', 4905, `vm._renderProxy = vm`, '#888')
+      tagVariable('initProxy(vm)', 'initProxy(vm)', '在实例上添加_renderProxy,值是vm实例', 4905, `vm._renderProxy = vm`, '#888')
     }
     // expose real self
     vm._self = vm;
     initLifecycle(vm);
-    console.log(vm)
     tagVariable('initLifecycle(vm)', 'initLifecycle(vm)', '在实例上添加$children,$refs, $parent等', 4905, {'vm.$parent': '值为undefined,该组件没有父组件','vm.$children': '初始化为[]','vm.$refs': '初始化{}', 'vm._watcher': '初始化为null'}, '#336')
     initEvents(vm);
     tagVariable('initEvents(vm)', 'initEvents(vm)', '在实例上添加_events,$refs, _hasHookEvent等', 4905, {'vm._event': '初始化为{}','vm._hasHookEvent': '初始化为false'}, '#855')
@@ -4904,8 +4902,8 @@ function initMixin (Vue) {
     hookFunc('beforeCreate', {'1实现': "callHook(vm, 'beforeCreate')其实就是取出开发者写options的beforeCreated执行", 
                               '2callHook': '在callHook有句代码vm.$options[hook][i].call(vm), 在vm实例作用域下执行,这是就是为什么我们可以在钩子函数里用this调用data数据,methods方法的原因',
                               '3vm.$emit("hook:" + hoook)': '可以用来监听组件的生命周期钩子',
-                              '4tip': '在beforeCreated时,data,props,methods等未初始化,所以开发者都不能调用这些',
-                              '5t': '下面打印的就是我写的beforeCreate钩子'}) 
+                              '4': '在beforeCreated时,data,props,methods等未初始化,所以开发者都不能调用这些',
+                              '5': '下面打印的就是我写的beforeCreate钩子'}) 
     callHook(vm, 'beforeCreate');    
     initInjections(vm); // resolve injections before data/props
     segmentLine('initState(vm)','', '', 11, 
@@ -4913,7 +4911,7 @@ function initMixin (Vue) {
    2:'我们的例子只会initData(vm), initMethods()',
    3:'props初始化早于data,所以你可以在data里使用props接收到的值'}, [15,22])
     initState(vm);
-    segmentLine('initState(vm)','', 'end', 11, {}, [15,22])
+    segmentLine('initState(vm)','', 'end', 11, ['初始化完成,在挂载阶段就可以通过实例访问data,methods,钩子函数等'], [15,22])
     initProvide(vm); // resolve provide after data/props
         
     hookFunc('created', {'1实现': "callHook(vm, 'created')其实就是取出开发者写options的created执行", 
@@ -4923,7 +4921,7 @@ function initMixin (Vue) {
                               '5': '下面打印的就是我写的created钩子'}) 
     callHook(vm, 'created');
 
-
+    sumText('初始化阶段完成了data,methods等初始化,在后面的代码你可以通过vm.name,vm.changeName调用')
     /* istanbul ignore if */
     if ("development" !== 'production' && config.performance && mark) {
       vm._name = formatComponentName(vm, false);
@@ -4932,10 +4930,10 @@ function initMixin (Vue) {
     }
 
     if (vm.$options.el) {
-      stageDesc('挂载阶段', '将我们写的组件挂载到给定元素上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
-      segmentLine('vm.$mount(vm.$options.el)','', '', 11, ['将实现视图的渲染'],[24, 51])
+      stageDesc('挂载阶段', '将我们写的组件挂载到给定元素(id=app)上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
+      segmentLine('vm.$mount(vm.$options.el)','', '', 11, ['将实现视图的渲染'],[24, 52])
       vm.$mount(vm.$options.el);
-      segmentLine('vm.$mount(vm.$options.el)','', 'end', 11, [],[24, 51])
+      segmentLine('vm.$mount(vm.$options.el)','', 'end', 11, [],[24, 52])
     }
   };
 }
@@ -5024,9 +5022,9 @@ function Vue (options) {
     warn('Vue is a constructor and should be called with the `new` keyword');
   }
   segmentLine('this._init(options)','', '', 11, 
-  {1:'看第1步定义了Vue的钩子函数,new Vue({..})会实例化时,会执行this._init(options)',
-   2:'执行this._init(options)就是第2步添加的_init方法, 因为this指向vm(Vue的实例)',
-   3:'参数options就是传递的{el:"#app",data()....},一个对象,开发者写的选项'}, [8, 53])
+  {1:'在vue-console.html文件里,我们通过new Vue({..})发生实例化,就是执行第1步的Vue构造函数,this._init(options)被执行',
+   2:'执行this._init(options)就是第2步添加到Vue原型上的_init方法, 因为this指向vm(Vue的实例), options就是开发者写的选项内容',
+   '3options':options,}, [8, 53])
   this._init(options);
   segmentLine('this._init(options)','', 'end', 1, ['下图描述了整个数据响应,以及发生改变的更新过程'], [8, 53])
   console.log("%c\n       ", "font-size:390px;background:url('https://s1.ax1x.com/2018/12/14/FU0Wzd.png') no-repeat");
@@ -5384,7 +5382,7 @@ tagVariable('initGlobalAPI(Vue)', 'initGlobalAPI(Vue)','在Vue上添加静态属
 
 sumText('前面1~6步是对Vue.prototype原型的加工(添加很多属性和方法,以后可以通过实例访问),第7步Vue添加了静态属性和方法;以上7步未使用new Vue({..})之前就完成,其实就是<script src="./vue.js"></script>引入时就完成了')
 
-stageDesc('初始化', '下面通过这个例子分析Vue',{1: `new Vue({el:'#app',data() {return {name: '点我'}},methods: {changeName () {this.name = 'jike'}}})`})
+stageDesc('初始化', '下面通过这个例子分析Vue',{1: `new Vue({el:'#app',data() {return {name: '点我'}},methods: {changeName () {this.name = 'jike'}}})`, 2: '这个阶段会完成data和methods等初始化为挂载作准备'})
 
 Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
@@ -11179,15 +11177,14 @@ var createCompiler = createCompilerCreator(function baseCompile (
   template,
   options
 ) {
-  tagVariable(template, 'template', '这里的template就是上一步id=app的dom的outerHTML的值', 4905, [`template的是一个字符串`], '#800080')
+  tagVariable(template, 'template', '这里的template就是上一步id=app的dom的outerHTML的值', 4905, [`template的是一个字符串(包括换行符), 将用来生成抽象语法树(ast)`], '#800080')
   var ast = parse(template.trim(), options);
   tagVariable('var ast = parse(template.trim(), options)', 'var ast = parse(template.trim(), options)', '将模版字符串(template)转化成ast(抽象语法树)', 4905, {1:"将字符串通过正则生成树形结构的数据(每一层数据对应相对应的dom)","ast": ast, "说明": 'dom是三层对象,所以ast也是三层的'  }, '#7fff7f')
   if (options.optimize !== false) {
     optimize(ast, options);
   }
   var code = generate(ast, options);
-  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code值':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面我通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 前面这段代码会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
-  console.log(code)
+  tagVariable('var code = generate(ast, options)', 'var code = generate(ast, options)', '由上一步的ast生成渲染函数字符串形式', 4905, {'1code包括render和staticRenderFns':code, "2code.render": '是一个字符串,字符串内容是一段js代码, 其中_v, _s, _c都是函数, 就是我们在第6步定义的, 后面是通过new Function(code.render)执行这段代码','3new Funtion(code)': '可以将字符串代码转化成代码执行, 例:new Function("console.log(1)"), 这段代码结果会打印1', "4code.staticRenderFns": '用来渲染静态节点的,我们这里没有,所以为[]'  }, '#006180')
   jiketemplate = code.render
   return {
     ast: ast,
@@ -11230,7 +11227,7 @@ Vue.prototype.$mount = function (
   hydrating
 ) {
   el = el && query(el);
-  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值), 下一条就是el的值,`, el, 'query(el): document.querySelector(el)'], '#FF359A')
+  tagVariable('el = el && query(el)', 'el = el && query(el)', '获取你要挂载节点的dom', 4905, [`这里就是获取id=app的dom(这个时候的dom还是{{name}}形式,还未替换值),`, el, 'query(el): document.querySelector(el)通过它获取dom'], '#FF359A')
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
