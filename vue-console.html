@@ -13,6 +13,7 @@
   </div>
   </div>
   <script>
+    var style = 'font-size: 20px;color: blue'
     var vm = new Vue({
       el:'#app',
       data() {
@@ -21,22 +22,22 @@
         }
       },
       beforeCreate () {
-        console.log('%cI am beforeCreate------ 我在选项里写的', 'font-size: 20px;color: blue')
+        console.log('%cI am beforeCreate------ 我在选项里写的', style)
       },
       created () {
-        console.log('%cI am created------ 我在选项里写的', 'font-size: 20px;color: #368')
+        console.log('%cI am created------ 我在选项里写的', style)
       },
       beforeMount () {
-        console.log('%cI am beforeMount------ 我在选项里写的', 'font-size: 20px;color: #659')
+        console.log('%cI am beforeMount------ 我在选项里写的', style)
       },
       mounted () {
-        console.log('%cI am mounted------ 我在选项里写的', 'font-size: 20px;color: #028')
+        console.log('%cI am mounted------ 我在选项里写的', style)
       },
       beforeUpdate () {
-        console.log('%cI am beforeUpdate------ 我在选项里写的', 'font-size: 20px;color: #619')
+        console.log('%cI am beforeUpdate------ 我在选项里写的',style)
       },
       updated () {
-        console.log('%cI am updated------ 我在选项里写的', 'font-size: 20px;color: #619')
+        console.log('%cI am updated------ 我在选项里写的', style)
       },
       methods: {
         changeName () {
