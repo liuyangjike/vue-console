@@ -186,9 +186,16 @@ var endText = function () {
 
 startText()
 
+var markFuncTime
+var markInitTime
+var markMountTime
+var markUpdateTime
+
 //=====console.log=========
 
+
 var emptyObject = Object.freeze({});
+
 
 // these helpers produces better vm code in JS engines due to their
 // explicitness and function inlining
@@ -3230,6 +3237,13 @@ function callUpdatedHooks (queue) {
       callHook(vm, 'updated');
     }
     endText()
+    var consoleTable = [
+      {stage: '构造函数阶段', '耗时(ms)': markFuncTime},
+      {stage: '初始化阶段', '耗时(ms)': markInitTime},
+      {stage: '挂载阶段', '耗时(ms)': markMountTime},
+      {stage: '更新阶段', '耗时(ms)': markUpdateTime},
+    ]
+    console.table(consoleTable)
   }
 }
 
@@ -3356,12 +3370,15 @@ Watcher.prototype.get = function get () {
       segmentLine('updateComponent()','', '', 3356, ['这里面会对name取值,会触发name的get函数,这里也响应系统的关键', 'updateComponent()执行, 根据30步讲解,会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [31, 49])
     } else {
       segmentLine('updateComponent()','', '', 3358, ['updateComponent()执行(基本初始化差不多,只不过回vm._update()的patch函数会不同,它会对比新旧vnode的变化,再更新变化,效率大大提高),会先执行vm._render()生成虚拟DOM,在执行vm._update()生成真实DOM'], [55, 72])
+      var markUpdateStart = window.performance.now()
     }
     value = this.getter.call(vm, vm);
     if (!consoleInUpdate) {
       segmentLine('updateComponent()','', 'end', 3362, {}, [31, 49])
     } else {
       segmentLine('updateComponent()','', 'end', 3364, ['更新视图结束...'], [55, 72])
+      var markUpdateEnd = window.performance.now()
+      markUpdateTime = markUpdateEnd - markUpdateStart
     }
   } catch (e) {
     if (this.user) {
@@ -4851,6 +4868,8 @@ var uid$3 = 0;
 
 function initMixin (Vue) {
   Vue.prototype._init = function (options) {
+
+    var markInitStart = window.performance.now() 
     var vm = this;
     // a uid
     vm._uid = uid$3++;
@@ -4928,11 +4947,17 @@ function initMixin (Vue) {
       mark(endTag);
       measure(("vue " + (vm._name) + " init"), startTag, endTag);
     }
+    var markInitEnd = window.performance.now() 
+    markInitTime = markInitEnd - markInitStart
+
 
     if (vm.$options.el) {
       stageDesc('挂载阶段', '将我们写的组件挂载到给定元素(id=app)上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
       segmentLine('vm.$mount(vm.$options.el)','', '', 4934, ['将实现视图的渲染'],[24, 52])
+      var markMountStart = window.performance.now() 
       vm.$mount(vm.$options.el);
+      var markMountEnd = window.performance.now() 
+      markMountTime = markMountEnd - markMountStart
       segmentLine('vm.$mount(vm.$options.el)','', 'end', 4936, [],[24, 52])
     }
   };
@@ -5014,7 +5039,7 @@ function dedupe (latest, extended, sealed) {
   }
 }
 stageDesc('构造函数阶段', '对Vue构造函数的加工',['在它上面添原型属性或方法,或者添加静态属性,为初始化作准备'])
-
+var markFuncStart = window.performance.now() 
 function Vue (options) {
   if ("development" !== 'production' &&
     !(this instanceof Vue)
@@ -5379,6 +5404,8 @@ function initGlobalAPI (Vue) {
 }
 
 initGlobalAPI(Vue);
+var markFuncEnd = window.performance.now()
+markFuncTime = markFuncEnd - markFuncStart
 tagVariable('initGlobalAPI(Vue)', 'initGlobalAPI(Vue)','在Vue上添加静态属性:config, use, options,util, set, delete,extend 等', 5382, ['静态属性不同与原型上的属性,静态属性只能通过Vue访问,例:用插件时Vue.use(ElementUI),创建组件Vue.extend({..})', '原型上的属性一般通过实例访问,例:设置变量值this.$set(obj, key, value), 这里的this就是指向vm(Vue的实例)'], '#bbb')
 
 sumText('前面1~6步是对Vue.prototype原型的加工(添加很多属性和方法,以后可以通过实例访问),第7步Vue添加了静态属性和方法;以上7步未使用new Vue({..})之前就完成,其实就是<script src="./vue.js"></script>引入时就完成了')
@@ -11311,3 +11338,5 @@ Vue.compile = compileToFunctions;
 return Vue;
 
 })));
+
+
