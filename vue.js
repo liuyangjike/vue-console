@@ -1198,7 +1198,7 @@ function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
-      stageDesc('更新阶段', '点击文本发生的更新过程',['该阶段通过name的set函数拦截name的值变化,触发观察者完成更新视图的过程(如上图的考生要修改答案开始到再次交卷的过程)'])
+      stageDesc('更新', '点击文本发生的更新过程',['该阶段通过name的set函数拦截name的值变化,触发观察者完成更新视图的过程(如上图的考生要修改答案开始到再次交卷的过程)'])
       var value = getter ? getter.call(obj) : val;
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
@@ -4952,7 +4952,7 @@ function initMixin (Vue) {
 
 
     if (vm.$options.el) {
-      stageDesc('挂载阶段', '将我们写的组件挂载到给定元素(id=app)上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
+      stageDesc('挂载', '将我们写的组件挂载到给定元素(id=app)上',['这部分是Vue的核心', '通过vm.$mount(vm.$options.el)实现;' , 'vm.$options.el就是"#app",以它为参数调用Vue原型上的$mount方法'])
       segmentLine('vm.$mount(vm.$options.el)','', '', 4934, ['将实现视图的渲染'],[24, 52])
       var markMountStart = window.performance.now() 
       vm.$mount(vm.$options.el);
@@ -5038,7 +5038,7 @@ function dedupe (latest, extended, sealed) {
     return latest
   }
 }
-stageDesc('构造函数阶段', '对Vue构造函数的加工',['在它上面添原型属性或方法,或者添加静态属性,为初始化作准备'])
+stageDesc('构造函数', '对Vue构造函数的加工',['在它上面添原型属性或方法,或者添加静态属性,为初始化作准备'])
 var markFuncStart = window.performance.now() 
 function Vue (options) {
   if ("development" !== 'production' &&
