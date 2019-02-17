@@ -3674,7 +3674,7 @@ function initData (vm) {
     }
   }
   // observe data
-  tagVariable('observe(data, true)', '观测data', '可以监控到name的取值,和设置值', 3660, ['观测data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
+  tagVariable('observe(data, true)', '劫持data', '可以监控到name的取值,和设置值', 3660, ['劫持data,将data的属性转化成get/set访问属性,为了是在取值和改值时能拦截到'], '#2dada1')  
 
   observe(data, true /* asRootData */);
   console.log("%c\n       ", "font-size:350px;background:url('https://s1.ax1x.com/2018/12/14/FNhoz6.png') no-repeat");
@@ -4816,10 +4816,10 @@ function renderMixin (Vue) {
     try {
       if (!consoleInUpdate) {
         segmentLine('vm._render()','', '', 4801, ['通过new Function(){code}执行渲染函数的字符串代码'], [32,38])
-        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4802, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')        
+        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4802, ['在this指向vm实例条件下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')        
       } else {
         segmentLine('vm._render()','', '', 4804, ['同上,不过name的值已经变为“jike”,将会生成新的vnode'], [56, 62])
-        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4805, ['在vm实例作用域下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
+        tagVariable(jiketemplate, '渲染函数', '开始执行这段代码', 4805, ['在this指向vm实例条件下执行, 从里往外执行(_s()-->_v()-->_c()-->_c()),里面执行函数的结果作为外面函数的参数,最后返回的值就是虚拟DOM'], '#006180')
       }
       vnode = render.call(vm._renderProxy, vm.$createElement);
       if (!consoleInUpdate) { 
