@@ -4913,7 +4913,7 @@ function initMixin (Vue) {
     initLifecycle(vm);
     tagVariable('initLifecycle(vm)', 'initLifecycle(vm)', '在实例上添加$children,$refs, $parent等', 4895, {'vm.$parent': '值为undefined,该组件没有父组件','vm.$children': '初始化为[]','vm.$refs': '初始化{}', 'vm._watcher': '初始化为null'}, '#336')
     initEvents(vm);
-    tagVariable('initEvents(vm)', 'initEvents(vm)', '在实例上添加_events,$refs, _hasHookEvent等', 4897, {'vm._event': '初始化为{}','vm._hasHookEvent': '初始化为false'}, '#855')
+    tagVariable('initEvents(vm)', 'initEvents(vm)', '在实例上添加_events, _hasHookEvent等', 4897, {'vm._event': '初始化为{}','vm._hasHookEvent': '初始化为false'}, '#855')
 
     initRender(vm);
     tagVariable('initRender(vm)', 'initRender(vm)', '在实例上添加_vnode,_staticTrees, $slot,_c, $createElement等', 4900, {'vm._node': '初始化为null','vm._staticTress': '初始化为null', 'vm._c': '(a, b, c, d) => createElement(vm, a, b, c, d, false)', 'vm.$createElement': '(a, b, c, d) => createElement(vm, a, b, c, d, true)'}, 'orange')
@@ -5059,7 +5059,7 @@ tagVariable('function Vue(options){this._init(options)}', 'Vue构造函数', '�
 initMixin(Vue);
 tagVariable('initMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加_init属性', 5035, ['initMixin(Vue), 以上一步定义的Vue构造函数为参,在它原型上添加_init,_init()用于初始化的过程后面再讲'], 'grey')
 stateMixin(Vue);
-tagVariable('stateMixin(Vue)', 'initMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 5037, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#da70d6')
+tagVariable('stateMixin(Vue)', 'stateMixin(Vue)','在Vue原型上添加$data, $prop, $watch, $set, $delete属性', 5037, ['stateMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性', '这里的$data代理了_data,$prop代理_props,就是说你访问$data其实访问_data,具体可以看源码'], '#da70d6')
 eventsMixin(Vue);
 tagVariable('eventMixin(Vue)', 'eventMixin(Vue)','在Vue原型上添加$on, $once, $offset, $emit属性', 5039, ['eventMixin(Vue), 继续以Vue构造函数为参,在它原型上添加属性'], '#67C23A')
 lifecycleMixin(Vue);
